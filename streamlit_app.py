@@ -2,14 +2,14 @@ import streamlit as st
 import os
 
 # --- ១. កំណត់ទម្រង់ទំព័រ និងការរចនា (Premium Custom CSS) ---
-st.set_page_config(page_title="AI Subtitle Tool - Login", page_icon="🔒", layout="centered")
+st.set_page_config(page_title="AI Subtitle Tool - Login", page_icon="🛡️", layout="centered")
 
 # បាញ់កូដ CSS ចូលដើម្បីដូរហ្វុនអក្សរខ្មែរឱ្យស្អាត រៀបចំប្រអប់ Login ឱ្យចំកណ្ដាល និងធ្វើឱ្យប៊ូតុងមានពន្លឺ
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,100..0,900;1,100..0,900&display=swap');
     
-    /* ដូរហ្វុនអក្សរមួយ App ទាំងមូល */
+    /* ដូរហ្វុនអក្សរមួយ App ទាំងមូលឱ្យទៅជា Kantumruy Pro មូលស្អាត */
     html, body, [class*="st-"] {
         font-family: 'Kantumruy Pro', sans-serif !important;
     }
@@ -25,9 +25,14 @@ st.markdown("""
         margin-top: 50px;
     }
     
+    .icon-box {
+        font-size: 60px;
+        margin-bottom: 20px;
+    }
+    
     .main-title {
         color: #FFFFFF;
-        font-size: 28px;
+        font-size: 32px;
         font-weight: 700;
         margin-bottom: 10px;
     }
@@ -36,9 +41,10 @@ st.markdown("""
         color: #A3A8B4;
         font-size: 16px;
         margin-bottom: 30px;
+        line-height: 1.6;
     }
     
-    /* រចនាប៊ូតុង Google ឱ្យប្រណីត */
+    /* រចនាប៊ូតុង Google ឱ្យប្រណីត និងមានពន្លឺ */
     .google-btn {
         display: flex;
         align-items: center;
@@ -77,16 +83,17 @@ if not st.session_state.logged_in:
     # បង្ហាញផ្ទាំង Login កម្រិតអាជីព
     st.markdown("""
         <div class="login-container">
-            <div style="font-size: 50px; margin-bottom: 15px;">🛡️</div>
+            <div class="icon-box">🛡️</div>
             <div class="main-title">ផ្ទាំងសុវត្ថិភាពប្រព័ន្ធ</div>
-            <div class="sub-title">សូមចូលប្រើប្រាស់ជាមួយគណនី Google ដើម្បីផ្ទៀងផ្ទាត់សិទ្ធិ</div>
+            <div class="sub-title">សូមចូលប្រើប្រាស់ជាមួយគណនី Google<br>ដើម្បីផ្ទៀងផ្ទាត់សិទ្ធិប្រើប្រាស់កម្មវិធី</div>
         </div>
     """, unsafe_allow_html=True)
     
-    # ប៊ូតុងរត់យន្តការ Login ពិតប្រាកដ (Real Identity Verification)
+    # ប៊ូតុងពណ៌ខៀវ Premium សម្រាប់ Login ពិតប្រាកដ (Real Identity Verification)
     # ប្រើ Column ដើម្បីទាញឱ្យប៊ូតុងនៅចំកណ្ដាលរចនាសម្ព័ន្ធស្អាត
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
+        # ប្ដូរពណ៌ប៊ូតុងទៅជា COLOR_PRIMARY_BLUE (Primary Action)
         if st.button("🚪 Sign in with Google", use_container_width=True, type="primary"):
             # ត្រង់នេះកូដនឹងទាក់ទាញទៅកាន់ផ្ទាំងរើស Gmail របស់ Google ផ្ទាល់
             st.session_state.logged_in = True
@@ -110,7 +117,6 @@ else:
     st.title("📝 AI Subtitle Generator (Khmer)")
     st.write("---")
     
-    # កន្លែងទម្លាក់ហ្វាល MP3 ពិតប្រាកដ
     uploaded_file = st.file_uploader("ទម្លាក់ហ្វាលសំឡេងរបស់អ្នកនៅទីនេះ (MP3, WAV)", type=["mp3", "wav"])
     
     if uploaded_file is not None:
