@@ -1,19 +1,11 @@
 import streamlit as st
 
-# --- ១. កំណត់ទម្រង់ទំព័រ និងការរចនា (Premium Custom CSS & Fonts) ---
+# --- ១. កំណត់ទម្រង់ទំព័រ និងការរចនា (Advanced UI Styles) ---
 st.set_page_config(page_title="AI Subtitle Tool - Login", page_icon="🛡️", layout="centered")
 
-# បាញ់កូដ CSS ជំនាន់ថ្មី បង្ខំឱ្យស្គាល់ហ្វុនខ្មែរមូលស្អាត និងប្ដូរប៊ូតុងទៅជាពណ៌ខៀវ
+# ប្រើប្រាស់ CSS បង្ខំ Font ក្នុងម៉ាស៊ីនឱ្យដើរភ្លាមៗ និងរចនាប៊ូតុងខៀវ
 st.markdown("""
     <style>
-    /* ទាញយកហ្វុនខ្មែរមូលស្អាតមកប្រើប្រាស់ */
-    @import url('https://fonts.googleapis.com/css2?family=Siemreap&family=Kantumruy+Pro:wght@400;700&display=swap');
-    
-    /* បង្ខំឱ្យប្រើហ្វុនខ្មែរមូលស្អាត (Siemreap / Kantumruy Pro) ទៅលើរាល់អក្សរទាំងអស់ */
-    html, body, [class*="st-"], div, span, p, h1, h2, h3 {
-        font-family: 'Siemreap', 'Kantumruy Pro', 'Khmer OS Battambang', sans-serif !important;
-    }
-    
     /* រចនាប្រអប់កណ្ដាល (Login Card) */
     .login-container {
         background-color: #111217;
@@ -30,26 +22,30 @@ st.markdown("""
         margin-bottom: 20px;
     }
     
+    /* រូបទី១៖ បង្ខំឱ្យចេញហ្វុនស្ទីលខ្មែរមូលដិត (ដូច Khmer M1) */
     .main-title {
+        font-family: 'Khmer OS Muol Light', 'Khmer OS Muol', 'Moul', 'Khmer OS Battambang', sans-serif !important;
         color: #FFFFFF;
-        font-size: 28px;
+        font-size: 32px;
         font-weight: bold;
-        margin-bottom: 15px;
-        letter-spacing: 0.5px;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
     }
     
+    /* រូបទី២៖ បង្ខំឱ្យចេញហ្វុនស្ទីលអក្សរដៃ/ឆ្លាក់ (ដូច Khmer Fasthand) */
     .sub-title {
+        font-family: 'Khmer OS Fasthand', 'Fanthand', 'Khmer OS Freehand', 'Khmer OS Battambang', cursive, sans-serif !important;
         color: #A3A8B4;
-        font-size: 16px;
+        font-size: 20px;
         margin-bottom: 30px;
         line-height: 1.8;
     }
     
-    /* បង្ខំកូដប៊ូតុងរបស់ Streamlit ឱ្យទៅជាពណ៌ខៀវប្រណីត (Premium Blue) */
+    /* រូបទី៣៖ បង្ខំកូដប៊ូតុងឱ្យទៅជាពណ៌ខៀវប្រណីត និងប្រើហ្វុនមូលស្អាត */
     div.stButton > button:first-child {
-        background-color: #1A73E8 !important; /* ពណ៌ខៀវ Google OAuth */
+        background-color: #1A73E8 !important; /* ពណ៌ខៀវ Google */
         color: white !important;
-        font-family: 'Siemreap', 'Kantumruy Pro', sans-serif !important;
+        font-family: 'Khmer OS Battambang', 'Siemreap', sans-serif !important;
         font-size: 16px !important;
         font-weight: bold !important;
         padding: 12px 24px !important;
@@ -60,9 +56,9 @@ st.markdown("""
         width: 100% !important;
     }
     
-    /* ពេលយកម៉ៅស៍ទៅដាក់ពីលើប៊ូតុងពណ៌ខៀវ */
+    /* ពេលយកម៉ៅស៍ទៅដាក់ពីលើប៊ូតុង */
     div.stButton > button:first-child:hover {
-        background-color: #1557B0 !important; /* ពណ៌ខៀវដិតជាងមុនបន្តិច */
+        background-color: #1557B0 !important;
         box-shadow: 0px 6px 16px rgba(26, 115, 232, 0.4) !important;
         transform: translateY(-1px);
     }
@@ -75,7 +71,7 @@ if 'logged_in' not in st.session_state:
 
 # --- ៣. ការបង្ហាញផលលើវេបសាយ (UI Render) ---
 if not st.session_state.logged_in:
-    # បង្ហាញផ្ទាំង Login ដែលមានរចនាសម្ព័ន្ធអក្សរ និងប្រអប់ច្បាស់លាស់
+    # បង្ហាញផ្ទាំង Login តាមទម្រង់ HTML ដើម្បីឱ្យហ្វុនដើរត្រឹមត្រូវ
     st.markdown("""
         <div class="login-container">
             <div class="icon-box">🛡️</div>
@@ -84,15 +80,15 @@ if not st.session_state.logged_in:
         </div>
     """, unsafe_allow_html=True)
     
-    # ទីតាំងប៊ូតុងពណ៌ខៀវសម្រាប់ចុច Login
+    # ទីតាំងប៊ូតុងពណ៌ខៀវ និងដាក់ម៉ាកសញ្ញា Google Emoji (🔴🔵🟡🟢)
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        if st.button("🚪 Sign in with Google", use_container_width=True):
+        if st.button("🔴🔵🟡🟢 Sign in with Google", use_container_width=True):
             st.session_state.logged_in = True
             st.rerun()
             
     st.markdown("""
-        <div style="text-align: center; margin-top: 35px; color: #FF4B4B; font-size: 13px; font-weight: bold;">
+        <div style="text-align: center; margin-top: 35px; color: #FF4B4B; font-size: 14px; font-family: 'Khmer OS Battambang', sans-serif;">
             ⚠️ សម្គាល់៖ ប្រព័ន្ធបិទជិតការពារការទាញយកទិន្នន័យលើសចំណុះ (Anti-Spam Control)
         </div>
     """, unsafe_allow_html=True)
@@ -109,9 +105,8 @@ else:
     st.title("📝 AI Subtitle Generator (Khmer)")
     st.write("---")
     
-    uploaded_file = st.file_uploader("សូមជ្រើសរើសហ្វាលសំឡេងរបស់អ្នក (MP3, WAV)", type=["mp3", "wav"])
-    
+    uploaded_file = st.file_uploader("សូមជ្រើសរើសហ្វាលសំឡេងរបស់អ្នក (MP3)", type=["mp3"])
     if uploaded_file is not None:
         st.audio(uploaded_file, format='audio/mp3')
         if st.button("🚀 ចាប់ផ្ដើមបម្លែងជា Subtitle ខ្មែរ"):
-            st.success("AI កំពុងដំណើរការ... ហ្វាលត្រៀមចេញជាលទ្ធផលហើយបង!")
+            st.success("AI កំពុងដំណើរការ...")
