@@ -18,45 +18,45 @@ st.markdown("""
         background-color: #0E1117; 
         padding: 40px;
         text-align: center;
-        max-width: 500px; 
+        max-width: 550px; /* ធំជាងមុនបន្តិចដើម្បីដាក់អក្សរក្រហមបានស្អាត */
         margin: 0 auto;
     }
 
-    /* ឡូហ្គោ AI SEC */
+    /* ឡូហ្គោ AI SEC ធំ (ដូចរូបទី១) */
     .logo-img {
-        width: 120px; 
-        margin-bottom: 20px;
+        width: 140px; 
+        margin-bottom: 25px;
     }
 
     /* ចំណងជើងធំ ហ្វុន Khmer M1 ពណ៌ស */
     .main-title {
         font-family: 'Khmer OS Muol Light', sans-serif !important;
         color: #FFFFFF !important; 
-        font-size: 28px;
-        margin-bottom: 15px;
+        font-size: 32px; /* ធំដូចរូបទី១ */
+        margin-bottom: 20px;
     }
 
-    /* អនុចំណងជើង ពណ៌ស */
+    /* អនុចំណងជើង ពណ៌ស ហ្វុន Kantumruy Pro */
     .sub-title {
         font-family: 'Kantumruy Pro', sans-serif !important;
         color: #FFFFFF !important; 
-        font-size: 16px !important;
-        margin-bottom: 30px;
-        line-height: 1.5;
+        font-size: 18px !important; /* ធំដូចរូបទី១ */
+        margin-bottom: 35px;
+        line-height: 1.6;
     }
 
-    /* ប៊ូតុង Google ពណ៌ស */
+    /* ប៊ូតុង Google ពណ៌ស ចំកណ្តាល */
     div.stButton > button:first-child {
         background-color: #FFFFFF !important; 
         color: #3C4043 !important;
         font-family: 'Kantumruy Pro', sans-serif !important;
         font-size: 15px !important; 
         font-weight: 600 !important;
-        padding: 8px 16px 8px 40px !important; /* ទុកកន្លែងដាក់ឡូហ្គោ */
+        padding: 8px 16px 8px 40px !important;
         border-radius: 4px !important;
         border: 1px solid #DADCE0 !important;
-        width: 250px !important; /* កំណត់ប្រវែងប៊ូតុងឱ្យសមល្មម */
-        margin: 0 auto; /* ទាញប៊ូតុងឱ្យនៅចំកណ្ដាល */
+        width: 250px !important; 
+        margin: 0 auto; 
         display: block;
         position: relative;
     }
@@ -75,13 +75,14 @@ st.markdown("""
         background-repeat: no-repeat;
     }
 
-    /* អក្សរសម្គាល់ពណ៌ក្រហមខាងក្រោម */
+    /* អក្សរសម្គាល់ពណ៌ក្រហម ចំកណ្តាល និងអត្ថបទថ្មី */
     .warning-text {
         color: #FF4B4B; 
-        font-size: 13px; 
+        font-size: 14px; /* រាងធំបន្តិចដូចក្នុងរូប */
         font-family: 'Kantumruy Pro', sans-serif;
-        margin-top: 30px;
-        line-height: 1.5;
+        margin-top: 35px;
+        line-height: 1.6;
+        text-align: center; /* ដាក់អក្សរឲ្យចំកណ្តាល */
     }
     </style>
 """, unsafe_allow_html=True)
@@ -104,6 +105,7 @@ if not st.session_state.logged_in:
         st.session_state.logged_in = True
         st.rerun()
             
+    # អក្សរពណ៌ក្រហមថ្មី ដាក់ចំកណ្តាល
     st.markdown("""
             <div class="warning-text">
                 សម្គាល់៖ សូមចូលប្រើប្រាស់គណនី Google ដើម្បីផ្ទៀងផ្ទាត់សិទ្ធិ<br>ប្រើប្រាស់កម្មវិធី។ សូមចូលប្រើប្រាស់ជាអនាមិក<br>ដើម្បីផ្ទៀងផ្ទាត់សិទ្ធិប្រើប្រាស់កម្មវិធី។
@@ -122,4 +124,4 @@ else:
     st.title("📝 AI Subtitle Generator (Khmer)")
     st.write("---")
     
-    # ⚠️ Paste កូដចាស់ ១៤0 ជួររបស់បងនៅខាងក្រោមនេះ!
+    # ⚠️ កុំភ្លេច Paste កូដចាស់ ១៤០ ជួររបស់បងនៅខាងក្រោមនេះ!
