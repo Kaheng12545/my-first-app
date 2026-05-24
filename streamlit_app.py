@@ -13,72 +13,72 @@ st.markdown("""
         background-color: #0E1117; 
     }
 
-    /* ប្រអប់កណ្ដាលពណ៌ខ្មៅ */
+    /* ប្រអប់កណ្ដាលពណ៌ខ្មៅ (ពង្រីកទំហំប្រអប់ធំជាងមុន ២ ដង) */
     .login-container {
         background-color: #0E1117; 
-        padding: 20px; /* បន្ថយ padding ឱ្យខ្លីជាងមុន */
+        padding: 40px; 
         text-align: center;
-        max-width: 500px; 
+        max-width: 900px; /* ពង្រីកប្រអប់ឱ្យធំ */
         margin: 0 auto;
     }
 
-    /* ឡូហ្គោ AI SEC */
+    /* ឡូហ្គោ AI SEC (ពង្រីកទំហំ ២ ដង) */
     .logo-img {
-        width: 120px; 
-        margin-bottom: 10px; /* បន្ថយចន្លោះខាងក្រោមឡូហ្គោ */
+        width: 250px; /* ពីមុន ១២០ ឥឡូវ ២៥០ */
+        margin-bottom: 30px; 
     }
 
-    /* ចំណងជើងធំ ហ្វុន Khmer M1 ពណ៌ស */
+    /* ចំណងជើងធំ ហ្វុន Khmer M1 ពណ៌ស (ពង្រីកទំហំ ២ ដង) */
     .main-title {
         font-family: 'Khmer OS Muol Light', sans-serif !important;
         color: #FFFFFF !important; 
-        font-size: 28px;
-        margin-bottom: 15px;
+        font-size: 55px; /* ពីមុន ២៨ ឥឡូវ ៥៥ */
+        margin-bottom: 25px;
     }
 
-    /* អនុចំណងជើង ពណ៌ស ហ្វុន Kantumruy Pro */
+    /* អនុចំណងជើង ពណ៌ស ហ្វុន Kantumruy Pro (ពង្រីកទំហំ ២ ដង) */
     .sub-title {
         font-family: 'Kantumruy Pro', sans-serif !important;
         color: #FFFFFF !important; 
-        font-size: 16px !important;
-        margin-bottom: 15px; /* ទាញប៊ូតុងឱ្យរំកិលឡើងលើកៀកអក្សរ */
+        font-size: 32px !important; /* ពីមុន ១៦ ឥឡូវ ៣២ */
+        margin-bottom: 40px; 
         line-height: 1.6;
     }
 
-    /* ប៊ូតុង Google ពណ៌ស */
+    /* ប៊ូតុង Google ពណ៌ស (ពង្រីកទំហំ ២ ដង) */
     div.stButton > button:first-child {
         background-color: #FFFFFF !important; 
         color: #3C4043 !important;
         font-family: 'Kantumruy Pro', sans-serif !important;
-        font-size: 15px !important; 
+        font-size: 28px !important; /* ពីមុន ១៥ ឥឡូវ ២៨ */
         font-weight: 600 !important;
-        padding: 8px 16px 8px 40px !important; 
-        border-radius: 4px !important;
+        padding: 15px 30px 15px 80px !important; /* ពង្រីកចន្លោះក្នុងប៊ូតុង */
+        border-radius: 8px !important;
         border: 1px solid #DADCE0 !important;
-        width: 100% !important; /* ដាក់ 100% ដើម្បីឱ្យវាពេញប្រអប់ Column កណ្ដាល */
+        width: 100% !important; 
         position: relative;
     }
 
-    /* ឡូហ្គោ Google "G" ក្នុងប៊ូតុង */
+    /* ឡូហ្គោ Google "G" ក្នុងប៊ូតុង (ពង្រីកទំហំ ២ ដង) */
     div.stButton > button:first-child::before {
         content: "";
         position: absolute;
-        left: 15px; 
+        left: 25px; 
         top: 50%;
         transform: translateY(-50%);
-        width: 18px; 
-        height: 18px;
+        width: 36px; /* ពីមុន ១៨ ឥឡូវ ៣៦ */
+        height: 36px;
         background-image: url('https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg');
         background-size: contain;
         background-repeat: no-repeat;
     }
 
-    /* អក្សរសម្គាល់ពណ៌ក្រហម ចំកណ្តាល */
+    /* អក្សរសម្គាល់ពណ៌ក្រហម ចំកណ្តាល (ពង្រីកទំហំ ២ ដង) */
     .warning-text {
         color: #FF4B4B; 
-        font-size: 13px; 
+        font-size: 26px; /* ពីមុន ១៣ ឥឡូវ ២៦ */
         font-family: 'Kantumruy Pro', sans-serif;
-        margin-top: 20px; /* ទាញអក្សរក្រហមឱ្យរំកិលឡើងលើកៀកប៊ូតុង */
+        margin-top: 40px; 
         line-height: 1.6;
         text-align: center; 
     }
@@ -99,8 +99,8 @@ if not st.session_state.logged_in:
         </div>
     """, unsafe_allow_html=True)
     
-    # ប្រើ st.columns ដើម្បីចាក់សោរប៊ូតុងឱ្យនៅចំកណ្ដាល ១០០% លែងរត់ទៅឆ្វេងទៀតហើយ
-    col1, col2, col3 = st.columns([1, 1.5, 1]) 
+    # ប្រើ st.columns ដើម្បីទាញប៊ូតុងឱ្យនៅចំកណ្ដាលស្អាត
+    col1, col2, col3 = st.columns([1, 2, 1]) 
     with col2:
         if st.button("Sign in with Google", use_container_width=True):
             st.session_state.logged_in = True
