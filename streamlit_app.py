@@ -10,7 +10,7 @@ st.markdown("""
 
     /* រចនាប្រអប់កណ្ដាលពណ៌ស (White Card) ធ្វើឱ្យធំជាងមុន ៣០% */
     .login-container {
-        background-color: #FFFFFF; /* ផ្ទៃពណ៌ស */
+        background-color: #FFFFFF; /* ផ្ទៃពណ៌ខ្មៅ */
         border-radius: 16px;
         padding: 50px 40px;
         text-align: center;
