@@ -75,8 +75,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- ២. ប្រព័ន្ធគ្រប់គ្រងការ Login ពិតប្រាកដជាមួយ Google ---
+# កូដ Client ID និងលីងវេបសាយពិតប្រាកដត្រូវបានដាក់បញ្ចូលត្រឹមត្រូវ
 CLIENT_ID = "23291298297-f4h36r7vnktqt26m4io96512slrduv8l.apps.googleusercontent.com"
-REDIRECT_URI = "https://kaheng12545-my-first-app-streamlit-app-b5z6u0.streamlit.app"
+REDIRECT_URI = "https://kaheng12545-my-first-app-streamlit-app-rkq4rg.streamlit.app"
 
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
@@ -90,7 +91,6 @@ if "code" in query_params:
 if not st.session_state.logged_in:
     auth_url = f"https://accounts.google.com/o/oauth2/v2/auth?client_id={CLIENT_ID}&response_type=code&scope=openid%20email%20profile&redirect_uri={REDIRECT_URI}"
 
-    # ជួសជុល៖ ដកគម្លាត (Spaces) ចេញទាំងអស់ដើម្បីកុំឱ្យវាចេញជាកូដខ្មៅៗទៀត
     html_code = f"""
 <div class="login-container">
 <img src="https://cdn-icons-png.flaticon.com/512/843/843296.png" class="logo-img" alt="AI SEC Logo">
@@ -114,5 +114,5 @@ else:
     st.write("---")
     
     # ==================================================================
-    # ⚠️ យកកូដ AI ចាស់ ១៤០ ជួររបស់បងមក Paste បន្តនៅខាងក្រោមនេះ
+    # ⚠️ សូមបង Paste កូដ AI ចាស់ ១៤០ ជួររបស់បង បន្តនៅខាងក្រោមបន្ទាត់នេះ
     # ==================================================================
