@@ -1,122 +1,131 @@
 import streamlit as st
 
-# --- ១. កំណត់ទម្រង់ទំព័រ និងការរចនា ---
+# --- ១. កំណត់ទម្រង់ទំព័រ និងការរចនា (White Theme) ---
 st.set_page_config(page_title="AI Subtitle Tool - Login", page_icon="🛡️", layout="centered")
 
 st.markdown("""
     <style>
-    /* ទាញយកហ្វុនខ្មែរ */
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro&display=swap');
 
-    /* ផ្ទៃខាងក្រោយពណ៌ខ្មៅ */
-    .stApp {
-        background-color: #0E1117; 
-    }
+    /* ផ្ទៃខាងក្រោយពណ៌ស/ប្រផេះស្រាល */
+    .stApp { background-color: #F8F9FA; }
 
-    /* ប្រអប់កណ្ដាលពណ៌ខ្មៅ (ពង្រីកទំហំប្រអប់ធំជាងមុន ២ ដង) */
+    /* ប្រអប់កណ្ដាលពណ៌ស */
     .login-container {
-        background-color: #0E1117; 
-        padding: 40px; 
+        background-color: #FFFFFF;
+        border: 1px solid #E0E0E0;
+        border-radius: 12px;
+        padding: 40px;
         text-align: center;
-        max-width: 900px; /* ពង្រីកប្រអប់ឱ្យធំ */
+        max-width: 550px;
         margin: 0 auto;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
     }
 
-    /* ឡូហ្គោ AI SEC (ពង្រីកទំហំ ២ ដង) */
-    .logo-img {
-        width: 250px; /* ពីមុន ១២០ ឥឡូវ ២៥០ */
-        margin-bottom: 30px; 
-    }
+    /* ឡូហ្គោ AI SEC ធំ */
+    .logo-img { width: 140px; margin-bottom: 20px; }
 
-    /* ចំណងជើងធំ ហ្វុន Khmer M1 ពណ៌ស (ពង្រីកទំហំ ២ ដង) */
+    /* ចំណងជើងធំ ពណ៌ខ្មៅ/ប្រផេះដិត */
     .main-title {
         font-family: 'Khmer OS Muol Light', sans-serif !important;
-        color: #FFFFFF !important; 
-        font-size: 55px; /* ពីមុន ២៨ ឥឡូវ ៥៥ */
-        margin-bottom: 25px;
+        color: #202124 !important; 
+        font-size: 32px;
+        margin-bottom: 15px;
     }
 
-    /* អនុចំណងជើង ពណ៌ស ហ្វុន Kantumruy Pro (ពង្រីកទំហំ ២ ដង) */
+    /* អនុចំណងជើង ពណ៌ប្រផេះ */
     .sub-title {
         font-family: 'Kantumruy Pro', sans-serif !important;
-        color: #FFFFFF !important; 
-        font-size: 32px !important; /* ពីមុន ១៦ ឥឡូវ ៣២ */
-        margin-bottom: 40px; 
+        color: #5F6368 !important;
+        font-size: 18px !important;
+        margin-bottom: 35px;
         line-height: 1.6;
     }
 
-    /* ប៊ូតុង Google ពណ៌ស (ពង្រីកទំហំ ២ ដង) */
-    div.stButton > button:first-child {
-        background-color: #FFFFFF !important; 
-        color: #3C4043 !important;
-        font-family: 'Kantumruy Pro', sans-serif !important;
-        font-size: 28px !important; /* ពីមុន ១៥ ឥឡូវ ២៨ */
-        font-weight: 600 !important;
-        padding: 15px 30px 15px 80px !important; /* ពង្រីកចន្លោះក្នុងប៊ូតុង */
-        border-radius: 8px !important;
-        border: 1px solid #DADCE0 !important;
-        width: 100% !important; 
+    /* ប៊ូតុង Google (ឥឡូវក្លាយជា Link ចុចបានពិតប្រាកដ) */
+    .google-btn {
+        text-decoration: none !important;
+        display: block;
+        background-color: #FFFFFF;
+        color: #3C4043;
+        font-family: 'Kantumruy Pro', sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        padding: 10px 16px 10px 40px;
+        border-radius: 4px;
+        border: 1px solid #DADCE0;
+        width: 250px;
+        margin: 0 auto;
         position: relative;
+        text-align: center;
+        box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+        transition: background-color 0.2s;
     }
+    
+    .google-btn:hover { background-color: #F8F9FA; }
 
-    /* ឡូហ្គោ Google "G" ក្នុងប៊ូតុង (ពង្រីកទំហំ ២ ដង) */
-    div.stButton > button:first-child::before {
+    .google-btn::before {
         content: "";
         position: absolute;
-        left: 25px; 
+        left: 15px;
         top: 50%;
         transform: translateY(-50%);
-        width: 36px; /* ពីមុន ១៨ ឥឡូវ ៣៦ */
-        height: 36px;
+        width: 18px;
+        height: 18px;
         background-image: url('https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg');
         background-size: contain;
         background-repeat: no-repeat;
     }
 
-    /* អក្សរសម្គាល់ពណ៌ក្រហម ចំកណ្តាល (ពង្រីកទំហំ ២ ដង) */
+    /* អក្សរសម្គាល់ពណ៌ក្រហម ចំកណ្តាល */
     .warning-text {
-        color: #FF4B4B; 
-        font-size: 26px; /* ពីមុន ១៣ ឥឡូវ ២៦ */
+        color: #D93025;
+        font-size: 14px;
         font-family: 'Kantumruy Pro', sans-serif;
-        margin-top: 40px; 
+        margin-top: 35px;
         line-height: 1.6;
-        text-align: center; 
+        text-align: center;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- ២. ប្រព័ន្ធគ្រប់គ្រងការ Login ---
+# --- ២. ប្រព័ន្ធគ្រប់គ្រងការ Login ពិតប្រាកដជាមួយ Google ---
+# កូដសោរ Client ID របស់បង
+CLIENT_ID = "23291298297-f4h36r7vnktqt26m4io96512slrduv8l.apps.googleusercontent.com"
+REDIRECT_URI = "https://kaheng12545-my-first-app-streamlit-app-b5z6u0.streamlit.app"
+
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
+# ចាប់យកកូដឆ្លើយតបពី Google បន្ទាប់ពី User វាយ Password ត្រូវ
+query_params = st.query_params
+if "code" in query_params:
+    st.session_state.logged_in = True
+    st.query_params.clear()
+
 # --- ៣. ការបង្ហាញផលលើផ្ទាំងវេបសាយ ---
 if not st.session_state.logged_in:
-    st.markdown("""
+    # បង្កើតលីងទៅកាន់ទំព័រ Login របស់ Google ពិតប្រាកដ
+    auth_url = f"https://accounts.google.com/o/oauth2/v2/auth?client_id={CLIENT_ID}&response_type=code&scope=openid%20email%20profile&redirect_uri={REDIRECT_URI}"
+
+    st.markdown(f"""
         <div class="login-container">
             <img src="https://cdn-icons-png.flaticon.com/512/843/843296.png" class="logo-img" alt="AI SEC Logo">
             <div class="main-title">ផ្ទាំងសុវត្ថិភាពប្រព័ន្ធ</div>
             <div class="sub-title">សូមចូលប្រើប្រាស់ជាមួយគណនី Google<br>ដើម្បីផ្ទៀងផ្ទាត់សិទ្ធិប្រើប្រាស់កម្មវិធី</div>
-        </div>
-    """, unsafe_allow_html=True)
-    
-    # ប្រើ st.columns ដើម្បីទាញប៊ូតុងឱ្យនៅចំកណ្ដាលស្អាត
-    col1, col2, col3 = st.columns([1, 2, 1]) 
-    with col2:
-        if st.button("Sign in with Google", use_container_width=True):
-            st.session_state.logged_in = True
-            st.rerun()
             
-    # អក្សរពណ៌ក្រហម
-    st.markdown("""
-        <div class="warning-text">
-            សម្គាល់៖ សូមចូលប្រើប្រាស់គណនី Google ដើម្បីផ្ទៀងផ្ទាត់សិទ្ធិ<br>ប្រើប្រាស់កម្មវិធី។ សូមចូលប្រើប្រាស់ជាអនាមិក<br>ដើម្បីផ្ទៀងផ្ទាត់សិទ្ធិប្រើប្រាស់កម្មវិធី។
+            <a href="{auth_url}" class="google-btn">Sign in with Google</a>
+            
+            <div class="warning-text">
+                សម្គាល់៖ សូមចូលប្រើប្រាស់គណនី Google ដើម្បីផ្ទៀងផ្ទាត់សិទ្ធិ<br>ប្រើប្រាស់កម្មវិធី។ សូមចូលប្រើប្រាស់ជាអនាមិក<br>ដើម្បីផ្ទៀងផ្ទាត់សិទ្ធិប្រើប្រាស់កម្មវិធី។
+            </div>
         </div>
     """, unsafe_allow_html=True)
 
 else:
     with st.sidebar:
         st.markdown("### 🟢 គណនីសកម្ម")
-        st.write("អ្នកប្រើប្រាស់៖ លោកបង ហេង")
+        st.write("ស្ថានភាព៖ បានផ្ទៀងផ្ទាត់ជោគជ័យ")
         if st.button("ចាកចេញ (Logout)"):
             st.session_state.logged_in = False
             st.rerun()
@@ -125,5 +134,5 @@ else:
     st.write("---")
     
     # ==================================================================
-    # ⚠️ កុំភ្លេច Paste កូដចាស់ ១៤០ ជួររបស់បងនៅខាងក្រោមនេះ!
+    # ⚠️ ទីនេះ! កុំភ្លេចយកកូដ AI ចាស់ ១៤០ ជួររបស់បងមក Paste បន្តនៅខាងក្រោមនេះ!
     # ==================================================================
