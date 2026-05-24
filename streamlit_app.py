@@ -1,7 +1,8 @@
 import streamlit as st
+import main_app # 👈 ទាញយកហ្វាល main_app.py របស់បងចូលមកទីនេះ
 
 # --- ១. កំណត់ទម្រង់ទំព័រ និងការរចនា (White Theme) ---
-st.set_page_config(page_title="AI Subtitle Tool - Login", page_icon="🛡️", layout="wide") # ដូរ layout ទៅ wide វិញសម្រាប់ទំព័រការងារ
+st.set_page_config(page_title="AI Subtitle Tool - Login", page_icon="🛡️", layout="wide")
 
 st.markdown("""
 <style>
@@ -74,7 +75,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- ២. ប្រព័ន្ធគ្រប់គ្រងការ Login ---
+# --- ២. ប្រព័ន្ធគ្រប់គ្រងការ Login ពិតប្រាកដជាមួយ Google ---
 CLIENT_ID = "23291298297-f4h36r7vnktqt26m4io96512slrduv8l.apps.googleusercontent.com"
 REDIRECT_URI = "https://kaheng12545-my-first-app-streamlit-app-rkq4rg.streamlit.app"
 
@@ -86,7 +87,7 @@ if "code" in query_params:
     st.session_state.logged_in = True
     st.query_params.clear()
 
-# --- ៣. ផ្ទាំង Login (បើមិនទាន់ Login ឱ្យគាំងត្រឹមនេះ) ---
+# --- ៣. ការបង្ហាញផលលើផ្ទាំងវេបសាយ ---
 if not st.session_state.logged_in:
     auth_url = f"https://accounts.google.com/o/oauth2/v2/auth?client_id={CLIENT_ID}&response_type=code&scope=openid%20email%20profile&redirect_uri={REDIRECT_URI}"
 
@@ -101,19 +102,9 @@ if not st.session_state.logged_in:
 </div>
 """
     st.markdown(html_code, unsafe_allow_html=True)
-    st.stop() # បញ្ឈប់កូដត្រឹមនេះ បើអត់ទាន់ Login
-
+    st.stop() # គាំងត្រឹមនេះ បើមិនទាន់ Login
 
 # ==================================================================
-# 🟢 វគ្គទី ២៖ ផ្ទាំងការងារ (បើកដំណើរការនៅពេល Login ជោគជ័យ)
+# 🟢 វគ្គទី ២៖ បញ្ជាឱ្យហ្វាល main_app ដំណើរការនៅទីនេះ!
 # ==================================================================
-
-# បង្ហាញប៊ូតុង Logout នៅរបារចំហៀង (Sidebar)
-with st.sidebar:
-    st.markdown("### 🟢 គណនីសកម្ម")
-    st.success("បានផ្ទៀងផ្ទាត់ជោគជ័យ!")
-    if st.button("ចាកចេញ (Logout)"):
-        st.session_state.logged_in = False
-        st.rerun()
-
-# ⚠️ សូមបង Paste កូដ AI ចាស់ ១៤០ ជួររបស់បង (ចាប់ពី import រហូតដល់ចប់) បន្តនៅខាងក្រោមបន្ទាត់នេះ៖
+main_app.run_subtitle_app() # 👈 ហៅហ្វាល AI របស់បងមកបង្ហាញពេល Login ជោគជ័យ
