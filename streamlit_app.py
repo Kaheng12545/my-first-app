@@ -1,7 +1,7 @@
 import streamlit as st
 
 # --- ១. កំណត់ទម្រង់ទំព័រ និងការរចនា (White Theme) ---
-st.set_page_config(page_title="AI Subtitle Tool - Login", page_icon="🛡️", layout="centered")
+st.set_page_config(page_title="AI Subtitle Tool - Login", page_icon="🛡️", layout="wide") # ដូរ layout ទៅ wide វិញសម្រាប់ទំព័រការងារ
 
 st.markdown("""
 <style>
@@ -74,8 +74,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- ២. ប្រព័ន្ធគ្រប់គ្រងការ Login ពិតប្រាកដជាមួយ Google ---
-# កូដ Client ID និងលីងវេបសាយពិតប្រាកដត្រូវបានដាក់បញ្ចូលត្រឹមត្រូវ
+# --- ២. ប្រព័ន្ធគ្រប់គ្រងការ Login ---
 CLIENT_ID = "23291298297-f4h36r7vnktqt26m4io96512slrduv8l.apps.googleusercontent.com"
 REDIRECT_URI = "https://kaheng12545-my-first-app-streamlit-app-rkq4rg.streamlit.app"
 
@@ -87,11 +86,12 @@ if "code" in query_params:
     st.session_state.logged_in = True
     st.query_params.clear()
 
-# --- ៣. ការបង្ហាញផលលើផ្ទាំងវេបសាយ ---
+# --- ៣. ផ្ទាំង Login (បើមិនទាន់ Login ឱ្យគាំងត្រឹមនេះ) ---
 if not st.session_state.logged_in:
     auth_url = f"https://accounts.google.com/o/oauth2/v2/auth?client_id={CLIENT_ID}&response_type=code&scope=openid%20email%20profile&redirect_uri={REDIRECT_URI}"
 
     html_code = f"""
+<br><br>
 <div class="login-container">
 <img src="https://cdn-icons-png.flaticon.com/512/843/843296.png" class="logo-img" alt="AI SEC Logo">
 <div class="main-title">ផ្ទាំងសុវត្ថិភាពប្រព័ន្ធ</div>
@@ -101,18 +101,19 @@ if not st.session_state.logged_in:
 </div>
 """
     st.markdown(html_code, unsafe_allow_html=True)
+    st.stop() # បញ្ឈប់កូដត្រឹមនេះ បើអត់ទាន់ Login
 
-else:
-    with st.sidebar:
-        st.markdown("### 🟢 គណនីសកម្ម")
-        st.write("ស្ថានភាព៖ បានផ្ទៀងផ្ទាត់ជោគជ័យ")
-        if st.button("ចាកចេញ (Logout)"):
-            st.session_state.logged_in = False
-            st.rerun()
 
-    st.title("📝 AI Subtitle Generator (Khmer)")
-    st.write("---")
-    
-    # ==================================================================
-    # ⚠️ សូមបង Paste កូដ AI ចាស់ ១៤០ ជួររបស់បង បន្តនៅខាងក្រោមបន្ទាត់នេះ
-    # ==================================================================
+# ==================================================================
+# 🟢 វគ្គទី ២៖ ផ្ទាំងការងារ (បើកដំណើរការនៅពេល Login ជោគជ័យ)
+# ==================================================================
+
+# បង្ហាញប៊ូតុង Logout នៅរបារចំហៀង (Sidebar)
+with st.sidebar:
+    st.markdown("### 🟢 គណនីសកម្ម")
+    st.success("បានផ្ទៀងផ្ទាត់ជោគជ័យ!")
+    if st.button("ចាកចេញ (Logout)"):
+        st.session_state.logged_in = False
+        st.rerun()
+
+# ⚠️ សូមបង Paste កូដ AI ចាស់ ១៤០ ជួររបស់បង (ចាប់ពី import រហូតដល់ចប់) បន្តនៅខាងក្រោមបន្ទាត់នេះ៖
