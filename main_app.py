@@ -2,7 +2,7 @@ import streamlit as st
 import time
 
 def run_subtitle_app():
-    # --- 🎨 កូដ CSS ទុកតែប៊ូតុងមួយគ្រាប់ ---
+    # --- 🎨 ក្បួន CSS ចុងក្រោយ៖ ដាក់ប៊ូតុងចំកណ្តាលផ្ទៃខ្មៅ និងសម្លាប់អក្សរចោល ---
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro:wght@300;400;500;700&display=swap');
@@ -10,6 +10,7 @@ def run_subtitle_app():
     html, body, [class*="css"], [class*="st-"], p, span, div, label, li, button, input, select, textarea {
         font-family: 'Kantumruy Pro', sans-serif !important;
     }
+    
     .main-title {
         text-align: center;
         font-family: 'Khmer OS Muol Light', sans-serif !important;
@@ -18,52 +19,74 @@ def run_subtitle_app():
         margin-top: 10px;
         margin-bottom: 10px;
     }
-    .sub-title {
-        text-align: center;
-        color: #64748B;
-        font-size: 16px;
-        margin-bottom: 30px;
-    }
 
     /* ========================================================================= */
-    /* 💥 កម្ចាត់អក្សរ Upload ចេញពីប៊ូតុង ទុកតែ Icon 💥 */
+    /* 💥 កម្ចាត់អ្វីៗទាំងអស់ ទុកតែប្រអប់ខ្មៅ និងប៊ូតុងនៅចំកណ្តាល 💥 */
     /* ========================================================================= */
+
+    /* ១. បង្កើតផ្ទៃខ្មៅ (Dropzone) ឱ្យមានកម្ពស់ធំល្មមស្អាត */
+    div[data-testid="stFileUploaderDropzone"] {
+        position: relative !important;
+        height: 180px !important; /* កម្ពស់ប្រអប់ខ្មៅ */
+        background-color: #111827 !important; /* ពណ៌ផ្ទៃខ្មៅ */
+        border: 2px dashed #475569 !important; /* បន្ទាត់គែម */
+        border-radius: 12px !important;
+    }
+
+    /* ២. លាក់ចោលរាល់អក្សរ និងរូបភាពដើមរបស់ Streamlit ដែលរញ៉េរញ៉ៃ */
+    div[data-testid="stFileUploaderDropzone"] svg, 
+    div[data-testid="stFileUploaderDropzone"] div[data-testid="stMarkdownContainer"], 
+    div[data-testid="stFileUploaderDropzone"] small {
+        display: none !important;
+    }
+
+    /* ៣. ចាប់ទាញប៊ូតុងមកដាក់ "ចំកណ្តាល" ផ្ទៃខ្មៅតែម្តង (Absolute Center) */
     div[data-testid="stFileUploaderDropzone"] button {
-        text-indent: -9999px !important; /* រុញអក្សរចោលទៅក្រៅអេក្រង់ (តាមគំនិតបង) */
-        overflow: hidden !important;     
-        white-space: nowrap !important;
-        color: transparent !important;   /* ធ្វើឱ្យអក្សរថ្លា (តាមគំនិតបង) */
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important; /* ក្បួនដាក់ចំកណ្តាល ១០០% */
         
-        /* ដាក់ Icon ប៊ូតុងពណ៌ខៀវ */
-        background-color: #3B82F6 !important;
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>') !important;
-        background-position: center !important;
-        background-repeat: no-repeat !important;
-        
-        width: 100% !important; 
-        height: 60px !important;
+        width: 80px !important; /* ទំហំប៊ូតុង */
+        height: 45px !important;
+        background-color: #3B82F6 !important; /* ពណ៌ខៀវ */
         border: none !important;
         border-radius: 8px !important;
+        
+        /* សម្លាប់អក្សរចោល */
+        color: transparent !important; 
+        font-size: 0px !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        z-index: 99 !important;
         cursor: pointer !important;
     }
     
     div[data-testid="stFileUploaderDropzone"] button:hover {
         background-color: #2563EB !important;
+        transform: translate(-50%, -50%) scale(1.1) !important; /* ពេលយក Mouse ដាក់ វារីកធំបន្តិច */
     }
 
-    div[data-testid="stFileUploaderDropzone"] {
-        padding: 0 !important;
-        min-height: 60px !important;
-        border: 2px dashed #94A3B8 !important;
-        background-color: transparent !important;
-    }
-    
-    /* ក្បួនបម្រុង (Backup) លាក់រាល់អក្សរតូចៗដែលរឹងក្បាល */
-    [data-testid="stFileUploader"] small {
+    /* ៤. កម្ចាត់ Tag ដែល Google Translate បង្កើតចេញពីប៊ូតុង */
+    div[data-testid="stFileUploaderDropzone"] button * {
         display: none !important;
         color: transparent !important;
+        font-size: 0px !important;
+    }
+
+    /* ៥. ដាក់រូប Icon Upload ពណ៌សចូលចំកណ្តាលប៊ូតុងជំនួសអក្សរ */
+    div[data-testid="stFileUploaderDropzone"] button::after {
+        content: "" !important;
         position: absolute !important;
-        left: -9999px !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M11 15h2V9h3l-4-5-4 5h3z"/><path d="M20 18H4v-7H2v7c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-7h-2v7z"/></svg>') !important;
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        background-size: 24px !important;
+        display: block !important;
     }
     /* ========================================================================= */
     </style>
@@ -71,24 +94,22 @@ def run_subtitle_app():
 
     # --- ចំណងជើងកម្មវិធី ---
     st.markdown('<div class="main-title">🎙️ កម្មវិធីបកប្រែសំឡេងទៅជាអក្សរ</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-title">បម្លែងសំឡេង វីដេអូ ឬឯកសារ SRT ទៅជាអក្សរបានជាង ៦០ ភាសាជុំវិញពិភពលោក</div>', unsafe_allow_html=True)
 
     # ==========================================
     # 📂 ជំហានទី ១៖ ប្រអប់បញ្ចូលឯកសារ
     # ==========================================
-    st.markdown("### 📂 ជំហានទី ១៖ បញ្ចូលឯកសាររបស់អ្នក (ចុចលើប៊ូតុងខាងក្រោម)")
+    st.markdown("### 📂 ជំហានទី ១៖ បញ្ចូលឯកសាររបស់អ្នក")
     
-    # 🌟 អាថ៌កំបាំងនៅត្រង់នេះ៖ ខ្ញុំដកពាក្យ type=['mp3'...] ចេញ ដូច្នេះប្រព័ន្ធលែងលោតអក្សរ "200MB per file..." ទៀតហើយ! 🌟
+    # ប្រអប់ Upload
     uploaded_file = st.file_uploader("", label_visibility="collapsed")
 
-    # តែកំណត់លក្ខខណ្ឌចាប់ហ្វាលនៅទីនេះវិញ (ការពារការអាប់ឡូតខុស)
     allowed_extensions = ['mp3', 'wav', 'm4a', 'flac', 'mp4', 'mkv', 'srt', 'vtt', 'txt']
     
     if uploaded_file:
         file_ext = uploaded_file.name.split('.')[-1].lower()
         if file_ext not in allowed_extensions:
             st.error("❌ សូមអភ័យទោស! ប្រព័ន្ធទទួលតែឯកសារសំឡេង វីដេអូ ឬអត្ថបទ SRT/TXT ប៉ុណ្ណោះ។")
-            uploaded_file = None # បដិសេធហ្វាលហ្នឹងចោល
+            uploaded_file = None 
         else:
             st.success(f"✅ ឯកសារទទួលបានជោគជ័យ៖ {uploaded_file.name}")
 
@@ -158,7 +179,6 @@ def run_subtitle_app():
             "2\n00:00:06,000 --> 00:00:10,500\nថ្ងៃនេះយើងនឹងជជែកពី AI។"
         )
         st.text_area("អត្ថបទឯកសារ (Subtitle)", value=sample_result, height=150)
-
         st.download_button("📥 ទាញយក .SRT", data=sample_result, file_name="Translated.srt")
 
 if __name__ == "__main__":
