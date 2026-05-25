@@ -1,6 +1,4 @@
 import streamlit as st
-import tempfile
-import os
 
 # ខ្ចប់កូដការងារទាំងមូលទៅក្នុង Function មួយ
 def run_subtitle_app():
@@ -56,23 +54,22 @@ def run_subtitle_app():
     </style>
     """, unsafe_allow_html=True)
 
-    # --- រៀបចំប្រព័ន្ធចងចាំ API Key ---
+    # --- រៀបចំប្រព័ន្ធចងចាំ API Key (វាយម្ដង ចាំរហូត) ---
     if "openai_key" not in st.session_state:
         st.session_state.openai_key = ""
     if "gemini_key" not in st.session_state:
         st.session_state.gemini_key = ""
 
-    # របារចំហៀង
+    # របារចំហៀង (Sidebar)
     with st.sidebar:
         st.markdown("### ⚙️ ការកំណត់ API Keys")
-        # វាយម្ដង វាចាំរហូត
-        st.session_state.openai_key = st.text_input("OpenAI API Key (ស្តាប់សំឡេង)", value=st.session_state.openai_key, type="password")
-        st.session_state.gemini_key = st.text_input("Gemini API Key (បកប្រែ)", value=st.session_state.gemini_key, type="password")
+        st.session_state.openai_key = st.text_input("OpenAI API Key", value=st.session_state.openai_key, type="password")
+        st.session_state.gemini_key = st.text_input("Gemini API Key", value=st.session_state.gemini_key, type="password")
         
         st.markdown("---")
         st.markdown("### 🟢 គណនីសកម្ម")
         st.write("ស្ថានភាព៖ បានផ្ទៀងផ្ទាត់ជោគជ័យ")
-        if st.button("ចាកចេញ (Logout)", key="sidebar_logout"):
+        if st.button("ចាកចេញ (Logout)"):
             st.session_state.logged_in = False
             st.rerun()
 
@@ -85,12 +82,12 @@ def run_subtitle_app():
         st.markdown('<h3>📋 Batch Add Files</h3>', unsafe_allow_html=True)
         st.write("ALL (0) | MP3 (0) | WAV (0) | SRT (0) ...")
 
-        # 🚨 បានកែ Error កន្លែងប៊ូតុងនេះហើយ (លុប kind="secondary" ចេញ) 🚨
+        # ប៊ូតុង Add និង Delete
         col_btn1, col_btn2 = st.columns([2, 10]) 
         with col_btn1:
-            st.button("➕ Add SRT", key="add_srt_btn")
+            st.button("➕ Add SRT")
         with col_btn2:
-            st.button("🗑️ Delete", key="delete_btn")
+            st.button("🗑️ Delete")
 
         st.write("---")
 
@@ -102,24 +99,20 @@ def run_subtitle_app():
 
         st.write("---")
 
-        # កន្លែងជ្រើសរើស AI
+        # កន្លែងជ្រើសរើស AI (ដកកូដដែលធ្វើឱ្យ Error ចេញហើយ)
         col1, col2 = st.columns(2)
         with col1:
             st.markdown("**២. ម៉ូដែលបំបែកសំឡេង (ស្តាប់)**")
-            transcribe_model = st.selectbox("ម៉ូដែលបំបែកសំឡេង", ["Whisper-1 (OpenAI - ណែនាំ)"], label_visibility="collapsed")
+            transcribe_model = st.selectbox("", ["Whisper-1 (OpenAI - ណែនាំ)"])
         
         with col2:
             st.markdown("**៣. ម៉ូដែលបកប្រែ (Translate)**")
-            translate_model = st.selectbox("ម៉ូដែលបកប្រែ", [
-                "Gemini 1.5 Pro (Google - ណែនាំ)", 
-                "Gemini 1.5 Flash (Google)",
-                "GPT-4o (OpenAI)"
-            ], label_visibility="collapsed")
+            translate_model = st.selectbox("", ["Gemini 1.5 Pro (Google - ណែនាំ)", "Gemini 1.5 Flash (Google)", "GPT-4o (OpenAI)"])
 
         st.write("") 
 
         # ប៊ូតុងដំណើរការ
-        if st.button("🚀 បម្លែងឯកសារឥឡូវនេះ (Translate)", key="convert_btn"):
+        if st.button("🚀 បម្លែងឯកសារឥឡូវនេះ (Translate)"):
             if not uploaded_file:
                 st.warning("⚠️ សូមអាប់ឡូតឯកសារ (MP3 ឬ SRT) សិន!")
             elif not st.session_state.openai_key or not st.session_state.gemini_key:
