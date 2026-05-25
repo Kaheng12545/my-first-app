@@ -2,7 +2,7 @@ import streamlit as st
 import time
 
 def run_subtitle_app():
-    # --- 🎨 កូដ CSS ថ្មី៖ ពង្រីកប្រអប់ និងប៊ូតុងឱ្យធំយក្ស ---
+    # --- 🎨 កូដ CSS ថ្មី៖ អក្សរចំកណ្តាល, ដក Emoji, និងដោះស្រាយបញ្ហាប៊ូតុងបាត់ ---
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro:wght@300;400;500;700&display=swap');
@@ -21,19 +21,20 @@ def run_subtitle_app():
     }
 
     /* ========================================================================= */
-    /* 🌟 ១. រចនាប្រអប់ពណ៌ខ្មៅ (ពង្រីកកម្ពស់ 120px និងអក្សរធំជាងមុន) */
+    /* 🌟 ១. ប្រអប់បង្ហាញឈ្មោះហ្វាលពណ៌ខ្មៅ (អក្សរចំកណ្តាល ១០០%) */
     /* ========================================================================= */
     .filename-box {
-        background-color: #111827 !important; /* ផ្ទៃពណ៌ខ្មៅ */
-        border: 2px dashed #334155 !important; /* ដាក់បន្ទាត់ដាច់ៗឱ្យដូចប្រអប់ Upload */
-        border-radius: 16px !important; /* គែមកោងស្អាត */
-        height: 120px !important; /* ⬅️ កម្ពស់ធំយក្ស */
+        background-color: #111827 !important;
+        border: 2px dashed #334155 !important; 
+        border-radius: 16px !important; 
+        height: 120px !important; 
         display: flex !important;
         align-items: center !important;
-        justify-content: center !important; /* រុញអក្សរចំកណ្តាល */
+        justify-content: center !important; /* ⬅️ ដាក់អក្សរចំកណ្តាល (ឆ្វេង-ស្តាំ) */
+        text-align: center !important;
         padding: 0 20px !important;
         font-family: 'Kantumruy Pro', monospace !important;
-        font-size: 20px !important; /* ⬅️ អក្សរធំជាងមុន */
+        font-size: 20px !important; 
         overflow: hidden !important;
         white-space: nowrap !important;
         text-overflow: ellipsis !important;
@@ -42,7 +43,7 @@ def run_subtitle_app():
     }
 
     /* ========================================================================= */
-    /* 🌟 ២. កម្ទេចរូបរាងប្រអប់ Uploader ចាស់ចោលទាំងអស់ ទុកតែប៊ូតុង */
+    /* 🌟 ២. កម្ទេចទម្រង់ Uploader ចាស់ចោល */
     /* ========================================================================= */
     [data-testid="stFileUploader"] {
         margin-bottom: 0 !important;
@@ -51,21 +52,25 @@ def run_subtitle_app():
         border: none !important;
         background-color: transparent !important;
         padding: 0 !important;
-        min-height: 120px !important; /* ⬅️ ត្រូវគ្នានឹងប្រអប់ខ្មៅ */
+        min-height: 120px !important; 
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
+    /* លាក់អក្សររញ៉េរញ៉ៃរបស់ Streamlit */
     [data-testid="stFileUploaderDropzone"] > div > div, 
     [data-testid="stFileUploaderDropzone"] small {
-        display: none !important;
+        display: none !important; 
     }
 
     /* ========================================================================= */
-    /* 🌟 ៣. រចនាប៊ូតុង "បញ្ចូលហ្វាល" នៅខាងស្តាំឱ្យធំៗ */
+    /* 🌟 ៣. ប៊ូតុង "Add File" នៅខាងស្តាំ (មុនពេល Upload) */
     /* ========================================================================= */
-    [data-testid="stFileUploaderDropzone"] button {
+    [data-testid="stFileUploaderDropzone"] > button {
         background-color: #3B82F6 !important;
         border: none !important;
         border-radius: 16px !important;
-        height: 120px !important; /* ⬅️ ប៊ូតុងកម្ពស់ធំយក្ស */
+        height: 120px !important; 
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
@@ -75,24 +80,75 @@ def run_subtitle_app():
         
         color: transparent !important; 
         font-size: 0px !important; 
-        overflow: hidden !important;
+        position: relative !important;
     }
-    [data-testid="stFileUploaderDropzone"] button:hover {
+    [data-testid="stFileUploaderDropzone"] > button:hover {
         background-color: #2563EB !important;
-        transform: translateY(-3px) !important; /* លោតឡើងលើបន្តិចពេលដាក់ Mouse */
+        transform: translateY(-3px) !important;
         box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5) !important;
     }
     
-    [data-testid="stFileUploaderDropzone"] button::after {
-        content: "➕ បញ្ចូលហ្វាល" !important;
+    [data-testid="stFileUploaderDropzone"] > button::after {
+        content: "Add File" !important; /* ⬅️ ដក Emoji ចេញ ដាក់អក្សរអង់គ្លេស */
         font-family: 'Kantumruy Pro', sans-serif !important;
-        font-size: 24px !important; /* ⬅️ អក្សរធំច្បាស់ៗ */
+        font-size: 24px !important; 
         font-weight: bold !important;
         color: white !important;
-        display: block !important;
-        line-height: 120px !important; /* ⬅️ តម្រឹមចំកណ្តាលប៊ូតុង */
-        text-align: center !important;
+        position: absolute !important;
+        top: 0; left: 0; right: 0; bottom: 0;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important; /* ⬅️ អក្សរចំកណ្តាលប៊ូតុង */
+    }
+
+    /* ========================================================================= */
+    /* 🌟 ៤. ប៊ូតុង "Remove File" (ក្រោយពេល Upload រួច - លែងចេញប្រអប់ទទេទៀតហើយ!) */
+    /* ========================================================================= */
+    [data-testid="stFileUploaderFileData"] {
+        position: relative !important;
         width: 100% !important;
+        height: 120px !important;
+        background-color: #EF4444 !important; /* ប្តូរទៅពណ៌ក្រហម (សញ្ញាលុប) */
+        border-radius: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4) !important;
+        transition: all 0.3s ease !important;
+    }
+    [data-testid="stFileUploaderFileData"]:hover {
+        background-color: #DC2626 !important;
+        transform: translateY(-3px) !important;
+    }
+    
+    /* ដាក់អក្សរ Remove File លើប៊ូតុងក្រហម */
+    [data-testid="stFileUploaderFileData"]::after {
+        content: "Remove File" !important;
+        color: white !important;
+        font-size: 24px !important;
+        font-weight: bold !important;
+        font-family: 'Kantumruy Pro', sans-serif !important;
+        position: absolute !important;
+        pointer-events: none !important;
+    }
+
+    /* ពង្រីកប៊ូតុងខ្វែង (X) របស់ Streamlit ឱ្យលាតសន្ធឹងពេញប្រអប់ក្រហម តែធ្វើឱ្យថ្លាមើលមិនឃើញ */
+    [data-testid="stFileUploaderFileData"] button {
+        position: absolute !important;
+        width: 100% !important;
+        height: 100% !important;
+        top: 0 !important;
+        left: 0 !important;
+        opacity: 0 !important; /* លាក់រូប X */
+        cursor: pointer !important;
+        z-index: 10 !important;
+    }
+    
+    /* លាក់ឈ្មោះហ្វាលនៅក្នុងប្រអប់ Remove (ព្រោះវាចេញនៅប្រអប់ខ្មៅហើយ) */
+    [data-testid="stFileUploaderFileData"] div[data-testid="stMarkdownContainer"] {
+        display: none !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -105,12 +161,13 @@ def run_subtitle_app():
     # ==========================================
     st.markdown("### 📂 ជំហានទី ១៖ បញ្ចូលឯកសាររបស់អ្នក")
     
-    # បែងចែកអេក្រង់ (កែទំហំឱ្យប៊ូតុងមានទំហំធំទូលាយបន្តិច ដើម្បីឱ្យអក្សរធំៗមើលទៅសម)
     col_box, col_btn = st.columns([2.5, 1.5])
 
+    # ប៊ូតុង Upload នៅខាងស្តាំ
     with col_btn:
         uploaded_file = st.file_uploader("", label_visibility="collapsed")
 
+    # ប្រអប់បង្ហាញឈ្មោះហ្វាលនៅខាងឆ្វេង
     with col_box:
         if uploaded_file:
             file_name = uploaded_file.name
@@ -118,7 +175,6 @@ def run_subtitle_app():
         else:
             st.markdown('<div class="filename-box" style="color: #64748B;">មិនទាន់មានឯកសារទេ...</div>', unsafe_allow_html=True)
 
-    # លក្ខខណ្ឌឆែកប្រភេទហ្វាល
     allowed_extensions = ['mp3', 'wav', 'm4a', 'flac', 'mp4', 'mkv', 'srt', 'vtt', 'txt']
     if uploaded_file:
         file_ext = uploaded_file.name.split('.')[-1].lower()
