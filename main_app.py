@@ -2,7 +2,7 @@ import streamlit as st
 import time
 
 def run_subtitle_app():
-    # --- 🎨 ក្បួន CSS ចុងក្រោយ៖ ដាក់ប៊ូតុងចំកណ្តាលផ្ទៃខ្មៅ និងសម្លាប់អក្សរចោល ---
+    # --- 🎨 កូដ CSS ថ្មី៖ រចនាប្រអប់ឈ្មោះហ្វាល និងប៊ូតុងដាច់ដោយឡែកពីគ្នា ---
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro:wght@300;400;500;700&display=swap');
@@ -17,78 +17,80 @@ def run_subtitle_app():
         color: #1E3A8A;
         font-size: 32px;
         margin-top: 10px;
-        margin-bottom: 10px;
+        margin-bottom: 30px;
     }
 
     /* ========================================================================= */
-    /* 💥 កម្ចាត់អ្វីៗទាំងអស់ ទុកតែប្រអប់ខ្មៅ និងប៊ូតុងនៅចំកណ្តាល 💥 */
+    /* 🌟 ១. រចនាប្រអប់ពណ៌ខ្មៅសម្រាប់បង្ហាញឈ្មោះហ្វាលនៅខាងឆ្វេង */
     /* ========================================================================= */
-
-    /* ១. បង្កើតផ្ទៃខ្មៅ (Dropzone) ឱ្យមានកម្ពស់ធំល្មមស្អាត */
-    div[data-testid="stFileUploaderDropzone"] {
-        position: relative !important;
-        height: 180px !important; /* កម្ពស់ប្រអប់ខ្មៅ */
-        background-color: #111827 !important; /* ពណ៌ផ្ទៃខ្មៅ */
-        border: 2px dashed #475569 !important; /* បន្ទាត់គែម */
-        border-radius: 12px !important;
+    .filename-box {
+        background-color: #111827 !important; /* ផ្ទៃពណ៌ខ្មៅ */
+        border: 1px solid #334155 !important;
+        border-radius: 8px !important;
+        height: 45px !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: 0 15px !important;
+        font-family: monospace !important;
+        font-size: 14px !important;
+        overflow: hidden !important;
+        white-space: nowrap !important;
+        text-overflow: ellipsis !important;
+        margin-top: 2px !important;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.2) !important;
     }
 
-    /* ២. លាក់ចោលរាល់អក្សរ និងរូបភាពដើមរបស់ Streamlit ដែលរញ៉េរញ៉ៃ */
-    div[data-testid="stFileUploaderDropzone"] svg, 
-    div[data-testid="stFileUploaderDropzone"] div[data-testid="stMarkdownContainer"], 
-    div[data-testid="stFileUploaderDropzone"] small {
+    /* ========================================================================= */
+    /* 🌟 ២. កម្ទេចរូបរាងប្រអប់ Uploader ចាស់ចោលទាំងអស់ ទុកតែប៊ូតុង */
+    /* ========================================================================= */
+    [data-testid="stFileUploader"] {
+        margin-bottom: 0 !important;
+    }
+    [data-testid="stFileUploaderDropzone"] {
+        border: none !important;
+        background-color: transparent !important;
+        padding: 0 !important;
+        min-height: 45px !important;
+    }
+    /* លាក់អក្សរអង់គ្លេស និង Icon ចាស់ៗទាំងអស់ */
+    [data-testid="stFileUploaderDropzone"] > div > div, 
+    [data-testid="stFileUploaderDropzone"] small {
         display: none !important;
     }
 
-    /* ៣. ចាប់ទាញប៊ូតុងមកដាក់ "ចំកណ្តាល" ផ្ទៃខ្មៅតែម្តង (Absolute Center) */
-    div[data-testid="stFileUploaderDropzone"] button {
-        position: absolute !important;
-        top: 50% !important;
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important; /* ក្បួនដាក់ចំកណ្តាល ១០០% */
-        
-        width: 80px !important; /* ទំហំប៊ូតុង */
-        height: 45px !important;
-        background-color: #3B82F6 !important; /* ពណ៌ខៀវ */
+    /* ========================================================================= */
+    /* 🌟 ៣. រចនាប៊ូតុង "បញ្ចូលហ្វាល" នៅខាងស្តាំ (ការពារការបកប្រែជាន់គ្នា ១០០%) */
+    /* ========================================================================= */
+    [data-testid="stFileUploaderDropzone"] button {
+        background-color: #3B82F6 !important;
         border: none !important;
         border-radius: 8px !important;
-        
-        /* សម្លាប់អក្សរចោល */
-        color: transparent !important; 
-        font-size: 0px !important;
+        height: 45px !important;
+        width: 100% !important;
+        margin: 0 !important;
         padding: 0 !important;
-        overflow: hidden !important;
-        z-index: 99 !important;
         cursor: pointer !important;
+        
+        /* ក្បួនសម្លាប់អក្សរដើមមិនឱ្យ Google Translate ឃើញ */
+        color: transparent !important; 
+        font-size: 0px !important; 
+        overflow: hidden !important;
+    }
+    [data-testid="stFileUploaderDropzone"] button:hover {
+        background-color: #2563EB !important;
     }
     
-    div[data-testid="stFileUploaderDropzone"] button:hover {
-        background-color: #2563EB !important;
-        transform: translate(-50%, -50%) scale(1.1) !important; /* ពេលយក Mouse ដាក់ វារីកធំបន្តិច */
-    }
-
-    /* ៤. កម្ចាត់ Tag ដែល Google Translate បង្កើតចេញពីប៊ូតុង */
-    div[data-testid="stFileUploaderDropzone"] button * {
-        display: none !important;
-        color: transparent !important;
-        font-size: 0px !important;
-    }
-
-    /* ៥. ដាក់រូប Icon Upload ពណ៌សចូលចំកណ្តាលប៊ូតុងជំនួសអក្សរ */
-    div[data-testid="stFileUploaderDropzone"] button::after {
-        content: "" !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M11 15h2V9h3l-4-5-4 5h3z"/><path d="M20 18H4v-7H2v7c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-7h-2v7z"/></svg>') !important;
-        background-repeat: no-repeat !important;
-        background-position: center !important;
-        background-size: 24px !important;
+    /* សរសេរអក្សរខ្មែរថ្មីចូលទៅក្នុងប៊ូតុងដោយសុវត្ថិភាព */
+    [data-testid="stFileUploaderDropzone"] button::after {
+        content: "➕ បញ្ចូលហ្វាល" !important;
+        font-family: 'Kantumruy Pro', sans-serif !important;
+        font-size: 15px !important;
+        color: white !important;
         display: block !important;
+        line-height: 45px !important;
+        text-align: center !important;
+        width: 100% !important;
     }
-    /* ========================================================================= */
     </style>
     """, unsafe_allow_html=True)
 
@@ -96,23 +98,36 @@ def run_subtitle_app():
     st.markdown('<div class="main-title">🎙️ កម្មវិធីបកប្រែសំឡេងទៅជាអក្សរ</div>', unsafe_allow_html=True)
 
     # ==========================================
-    # 📂 ជំហានទី ១៖ ប្រអប់បញ្ចូលឯកសារ
+    # 📂 ជំហានទី ១៖ ប្រអប់បញ្ចូលឯកសារ (រចនាថ្មីតាមគំនិតបង)
     # ==========================================
     st.markdown("### 📂 ជំហានទី ១៖ បញ្ចូលឯកសាររបស់អ្នក")
     
-    # ប្រអប់ Upload
-    uploaded_file = st.file_uploader("", label_visibility="collapsed")
+    # បែងចែកអេក្រង់ជា ២ ផ្នែក៖ ខាងឆ្វេងធំ (លេខ 3) ខាងស្តាំតូច (លេខ 1)
+    col_box, col_btn = st.columns([3, 1])
 
+    # ដាក់កូដ Uploader នៅខាងស្តាំ (col_btn)
+    with col_btn:
+        uploaded_file = st.file_uploader("", label_visibility="collapsed")
+
+    # ដាក់កូដប្រអប់ខ្មៅនៅខាងឆ្វេង (col_box) ដើម្បីបង្ហាញឈ្មោះហ្វាល
+    with col_box:
+        if uploaded_file:
+            # បើមានហ្វាលចូល បង្ហាញឈ្មោះហ្វាលពណ៌បៃតង
+            file_name = uploaded_file.name
+            st.markdown(f'<div class="filename-box" style="color: #10B981;">✅ ឯកសារ៖ {file_name}</div>', unsafe_allow_html=True)
+        else:
+            # បើអត់ទាន់មានហ្វាល បង្ហាញអក្សរពណ៌ប្រផេះ
+            st.markdown('<div class="filename-box" style="color: #64748B;">មិនទាន់មានឯកសារទេ...</div>', unsafe_allow_html=True)
+
+    # លក្ខខណ្ឌឆែកប្រភេទហ្វាលការពារអ្នកប្រើប្រាស់
     allowed_extensions = ['mp3', 'wav', 'm4a', 'flac', 'mp4', 'mkv', 'srt', 'vtt', 'txt']
-    
     if uploaded_file:
         file_ext = uploaded_file.name.split('.')[-1].lower()
         if file_ext not in allowed_extensions:
             st.error("❌ សូមអភ័យទោស! ប្រព័ន្ធទទួលតែឯកសារសំឡេង វីដេអូ ឬអត្ថបទ SRT/TXT ប៉ុណ្ណោះ។")
             uploaded_file = None 
-        else:
-            st.success(f"✅ ឯកសារទទួលបានជោគជ័យ៖ {uploaded_file.name}")
 
+    st.write("") # ដកឃ្លាបន្តិច
     st.divider()
 
     # ==========================================
