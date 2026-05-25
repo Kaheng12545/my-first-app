@@ -1,45 +1,61 @@
 import streamlit as st
 
 def run_subtitle_app():
-    # --- កំណត់ Font អក្សរខ្មែរឱ្យស្អាត ---
+    # --- 🎨 កំណត់ Font អក្សរខ្មែរឱ្យស្អាតគ្រប់ជ្រុងទាំងអស់ ---
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro&display=swap');
     
+    /* កំណត់អក្សរទូទៅទាំងអស់ឱ្យប្រើ Kantumruy Pro ឱ្យស្អាតស្មើគ្នា */
+    html, body, [class*="css"], [class*="st-"], p, span, div, label, li, button, input, select, textarea {
+        font-family: 'Kantumruy Pro', sans-serif !important;
+    }
+
+    /* កំណត់ចំណងជើង (Heading) ទាំងអស់ឱ្យប្រើ Khmer OS Muol Light និងពណ៌ខៀវ */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Khmer OS Muol Light', sans-serif !important;
+        color: #1a73e8 !important;
+    }
+    
+    /* ចំណងជើងកណ្តាល */
     .main-title {
         text-align: center;
-        color: #1a73e8;
         font-family: 'Khmer OS Muol Light', sans-serif !important;
+        color: #1a73e8 !important;
         font-size: 32px;
         margin-bottom: 5px;
     }
     .sub-title {
         text-align: center;
-        color: #5F6368;
         font-family: 'Kantumruy Pro', sans-serif !important;
         font-size: 16px;
+        color: #5F6368 !important;
         margin-bottom: 30px;
+    }
+    
+    /* រចនាប៊ូតុងដំណើរការឱ្យធំ លេចធ្លោ និងអក្សរស្អាត */
+    div.stButton > button:first-child {
+        width: 100%;
+        background-color: #1a73e8 !important;
+        color: white !important;
+        font-family: 'Kantumruy Pro', sans-serif !important;
+        font-weight: bold !important;
+        border-radius: 8px !important;
+        padding: 12px 0px !important;
+        font-size: 16px !important;
+        transition: 0.3s;
+        border: none !important;
+    }
+    div.stButton > button:first-child:hover {
+        background-color: #1557b0 !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-    # --- ប្រព័ន្ធចងចាំ API Key ---
-    if "openai_key" not in st.session_state:
-        st.session_state.openai_key = ""
-    if "gemini_key" not in st.session_state:
-        st.session_state.gemini_key = ""
-
     # ==========================================
-    # របារចំហៀង (Sidebar) - កន្លែងកំណត់សុវត្ថិភាព
+    # របារចំហៀង (Sidebar) - លុប API Keys ចេញ ទុកតែ Logout
     # ==========================================
     with st.sidebar:
-        st.markdown("### ⚙️ ការកំណត់ប្រព័ន្ធ (Settings)")
-        st.info("🔑 API Keys សម្រាប់ឱ្យ AI ដំណើរការ")
-        
-        st.session_state.openai_key = st.text_input("1️⃣ OpenAI API Key (ស្តាប់សំឡេង)", value=st.session_state.openai_key, type="password")
-        st.session_state.gemini_key = st.text_input("2️⃣ Gemini API Key (បកប្រែ)", value=st.session_state.gemini_key, type="password")
-        
-        st.divider() # គូសបន្ទាត់
         st.markdown("### 🟢 គណនីរបស់អ្នក")
         st.success("ស្ថានភាព៖ កំពុងប្រើប្រាស់")
         if st.button("ចាកចេញពីប្រព័ន្ធ (Logout)", use_container_width=True):
@@ -47,7 +63,7 @@ def run_subtitle_app():
             st.rerun()
 
     # ==========================================
-    # ផ្ទាំងកណ្តាល (Main Workflow) - តួកម្មវិធី
+    # ផ្ទាំងកណ្តាល (Main Workflow)
     # ==========================================
     st.markdown('<div class="main-title">ប្រព័ន្ធបកប្រែ Subtitle & សំឡេង</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-title">បម្លែងឯកសារសំឡេង ឬ Subtitle ទៅជាភាសាខ្មែរដោយស្វ័យប្រវត្តិជាមួយ AI</div>', unsafe_allow_html=True)
@@ -74,15 +90,13 @@ def run_subtitle_app():
     # --- ផ្នែកទី ៣៖ ប៊ូតុងបញ្ជា (Action) ---
     st.markdown("#### 🚀 ជំហានទី ៣៖ ចាប់ផ្ដើមប្រតិបត្តិការ")
     
-    # ប្រើ type="primary" ដើម្បីឱ្យវាចេញពណ៌លេចធ្លោស្អាតតាមស្តង់ដារប្រព័ន្ធ
+    # ប៊ូតុងដំណើរការ
     if st.button("ដំណើរការបម្លែងឯកសារឥឡូវនេះ", type="primary", use_container_width=True):
         if not uploaded_file:
             st.warning("⚠️ សូមបញ្ចូលឯកសារនៅ [ជំហានទី ១] សិន មុននឹងបន្ត!")
-        elif not st.session_state.openai_key or not st.session_state.gemini_key:
-            st.error("⚠️ សូមបញ្ចូល API Keys ទាំង ២ នៅរបារខាងឆ្វេងដៃសិន!")
         else:
             st.info(f"🔄 កំពុងដំណើរការឯកសារ {uploaded_file.name}... សូមរង់ចាំបន្តិច!")
             with st.spinner("ប្រព័ន្ធ AI កំពុងធ្វើការបកប្រែ..."):
                 import time
-                time.sleep(2) # ធ្វើពុតជាកំពុងដំណើរការ
+                time.sleep(2) # ធ្វើពុតជាកំពុងដំណើរការសិន
                 st.success("🎉 ដំណើរការបកប្រែជោគជ័យ! (ត្រៀមចូលវគ្គកូដ AI ពិតប្រាកដ)")
