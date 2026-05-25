@@ -2,91 +2,116 @@ import streamlit as st
 import time
 
 def run_subtitle_app():
-    # --- 🎨 កំណត់ Font អក្សរខ្មែរ និង CSS តុបតែង Sidebar Menu ---
+    # --- 🎨 កំណត់ CSS តាមស្ទីល Transkriptor Glassmorphism (Theme របស់បង) ---
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro:wght@300;400;700&display=swap');
     
-    /* កំណត់អក្សរទូទៅទាំងអស់ឱ្យប្រើ Kantumruy Pro */
+    /* 1. កំណត់ Font ទូទៅ */
     html, body, [class*="css"], [class*="st-"], p, span, div, label, li, button, input, select, textarea {
         font-family: 'Kantumruy Pro', sans-serif !important;
     }
 
-    /* កំណត់ចំណងជើង (Heading) ទាំងអស់ឱ្យប្រើ Khmer OS Muol Light និងពណ៌ខៀវ */
-    h1, h2, h3, h4, h5, h6 {
+    /* 2. កំណត់ពណ៌ផ្ទៃខាងក្រោយកម្មវិធីទាំងមូល (Theme: bg) */
+    .stApp {
+        background: linear-gradient(135deg, #A8B3C7 0%, #DDE3F0 100%) !important;
+    }
+
+    /* 3. កំណត់ពណ៌របារចំហៀង Sidebar (Theme: glass) */
+    section[data-testid="stSidebar"] {
+        background-color: rgba(221, 227, 240, 0.85) !important;
+        backdrop-filter: blur(15px) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.4) !important;
+    }
+
+    /* 4. កំណត់ចំណងជើងជាពណ៌ស (Theme: text) ឱ្យលេចធ្លោ */
+    h1, h2, h3, h4, h5, h6, .main-title {
         font-family: 'Khmer OS Muol Light', sans-serif !important;
-        color: #1a73e8 !important;
+        color: #FFFFFF !important;
+        text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     }
     
-    /* ចំណងជើងកណ្តាល */
     .main-title {
         text-align: center;
-        font-family: 'Khmer OS Muol Light', sans-serif !important;
-        color: #1a73e8 !important;
-        font-size: 30px;
+        font-size: 32px;
         margin-bottom: 5px;
     }
     .sub-title {
         text-align: center;
-        font-family: 'Kantumruy Pro', sans-serif !important;
         font-size: 15px;
-        color: #5F6368 !important;
+        color: #FFFFFF !important;
+        opacity: 0.9;
         margin-bottom: 30px;
     }
-    
-    /* រចនាប៊ូតុងដំណើរការឱ្យធំ លេចធ្លោ */
-    div.stButton > button:first-child {
-        width: 100%;
-        background-color: #1a73e8 !important;
-        color: white !important;
-        font-family: 'Kantumruy Pro', sans-serif !important;
-        font-weight: bold !important;
-        border-radius: 8px !important;
-        padding: 12px 0px !important;
-        font-size: 16px !important;
-        transition: 0.3s;
-        border: none !important;
-    }
-    div.stButton > button:first-child:hover {
-        background-color: #1557b0 !important;
+
+    /* 5. កែច្នៃប្រអប់ Form និងកន្លែងបញ្ចូលឯកសារឱ្យទៅជាកញ្ចក់ថ្លា (Theme: glass) */
+    div[data-testid="stForm"], 
+    .stFileUploader, 
+    div[data-testid="stNotification"] {
+        background-color: rgba(221, 227, 240, 0.7) !important;
+        backdrop-filter: blur(12px) !important;
+        border-radius: 16px !important;
+        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08) !important;
+        padding: 20px !important;
     }
 
-    /* 🛠️ កែច្នៃវិទ្យុ (Radio Button) ក្នុង Sidebar ឱ្យទៅជាប៊ូតុងម៉ឺនុយបញ្ជាស្អាត */
-    div[data-testid="stSidebar"] div[data-testid="stRadio"] {
-        padding: 10px 0px;
-    }
-    div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] {
-        gap: 10px;
-        flex-direction: column;
-    }
+    /* 6. កែច្នៃប៊ូតុងក្នុង Sidebar (Menu Selection) */
     div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label {
-        background-color: #f0f2f6;
+        background-color: #EEF2FF !important; /* Theme: button */
+        color: #2C3E50 !important;
+        border: 1px solid rgba(255, 255, 255, 0.6) !important;
+        border-radius: 10px !important;
         padding: 12px 16px !important;
-        border-radius: 8px !important;
-        border: 1px solid #e0e0e0;
         cursor: pointer;
-        transition: all 0.2s ease-in-out;
+        transition: 0.2s;
         width: 100%;
     }
     div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label:hover {
-        background-color: #e4e6eb;
-        border-color: #ccd0d5;
+        background-color: #DDE3F0 !important;
+        transform: translateY(-1px);
     }
-    /* នៅពេលចុចជ្រើសរើស ឱ្យវាឡើងពណ៌ខៀវលេចធ្លោ */
+    /* ម៉ឺនុយដែលបានជ្រើសរើស (Theme: accent) */
     div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label[data-checked="true"] {
-        background-color: #1a73e8 !important;
-        border-color: #1a73e8 !important;
+        background-color: #60A5FA !important; 
+        border-color: #60A5FA !important;
     }
     div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label[data-checked="true"] span {
-        color: white !important;
+        color: #FFFFFF !important;
         font-weight: bold !important;
     }
-    /* លាក់រង្វង់មូលមូលនៃ Radio Button */
+    /* លាក់រង្វង់មូលនៃ Radio Button */
     div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] [data-testid="stHighlightContainer"] {
         display: none !important;
     }
     div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label div:first-child {
         display: none !important;
+    }
+
+    /* 7. កែច្នៃប៊ូតុងដំណើរការចម្បង (Theme: accent & text) */
+    div.stButton > button:first-child {
+        width: 100%;
+        background-color: #60A5FA !important; /* Theme: accent */
+        color: #FFFFFF !important; /* Theme: text */
+        font-family: 'Kantumruy Pro', sans-serif !important;
+        font-weight: bold !important;
+        border-radius: 10px !important;
+        padding: 12px 0px !important;
+        font-size: 16px !important;
+        transition: 0.3s;
+        border: none !important;
+        box-shadow: 0 4px 15px rgba(96, 165, 250, 0.3) !important;
+    }
+    div.stButton > button:first-child:hover {
+        background-color: #3B82F6 !important;
+        transform: translateY(-1px);
+    }
+
+    /* ប៊ូតុង Logout (ពណ៌ទន់ភ្លន់) */
+    div[data-testid="stSidebar"] button {
+        background-color: #EEF2FF !important;
+        color: #EF4444 !important;
+        border: 1px solid rgba(239, 68, 68, 0.2) !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -95,20 +120,19 @@ def run_subtitle_app():
     # របារចំហៀង (Sidebar)
     # ==========================================
     with st.sidebar:
-        st.markdown("### 🟢 គណនីរបស់អ្នក")
+        st.markdown("<h3 style='color: #2C3E50 !important;'>🟢 គណនីរបស់អ្នក</h3>", unsafe_allow_html=True)
         st.success("ស្ថានភាព៖ កំពុងប្រើប្រាស់")
         
-        st.write("") # បន្ថែមគម្លាត
+        st.write("") 
         
         # 🎯 ម៉ឺនុយបញ្ជាផ្ទាំងការងារ (ស្ថិតនៅក្នុង Sidebar តាមស្នើសុំរបស់បង)
-        st.markdown("#### 🗺️ ម៉ឺនុយបញ្ជា")
+        st.markdown("<h4 style='color: #2C3E50 !important;'>🗺️ ម៉ឺនុយបញ្ជា</h4>", unsafe_allow_html=True)
         menu_option = st.radio(
             "សូមជ្រើសរើសផ្ទាំង៖",
             ["🎙️ បកប្រែសំឡេងទៅជាអក្សរ", "⚙️ ការកំណត់"],
-            label_visibility="collapsed" # លាក់ចំណងជើងសរសេរដើម្បីកុំឱ្យរញ៉េរញ៉ៃ
+            label_visibility="collapsed"
         )
         
-        # បន្ថែម Line break ឱ្យស្រឡះភ្នែក
         st.write("") 
         if st.button("ចាកចេញពីប្រព័ន្ធ (Logout)", use_container_width=True):
             st.session_state.logged_in = False
@@ -119,7 +143,7 @@ def run_subtitle_app():
     # ==========================================
     
     # ------------------------------------------
-    # លក្ខខណ្ឌទី ១៖ ប្រសិនបើជ្រើសរើស "🎙️ បកប្រែសំឡេងទៅជាអក្សរ"
+    # លក្ខខណ្ឌទី ១៖ ផ្ទាំង "🎙️ បកប្រែសំឡេងទៅជាអក្សរ"
     # ------------------------------------------
     if menu_option == "🎙️ បកប្រែសំឡេងទៅជាអក្សរ":
         st.markdown('<div class="main-title">ប្រព័ន្ធបកប្រែ Subtitle & សំឡេង</div>', unsafe_allow_html=True)
@@ -144,7 +168,6 @@ def run_subtitle_app():
         col1, col2 = st.columns(2)
         
         with col1:
-            # បើឯកសារជា SRT មិនចាំបាច់ប្រើម៉ូដែលស្ដាប់សំឡេងឡើយ
             if file_type == 'srt':
                 st.info("ℹ️ ឯកសារជាអត្ថបទ (SRT) មិនត្រូវការម៉ូដែលស្ដាប់សំឡេងឡើយ។")
                 transcribe_model = "មិនត្រូវការ"
@@ -174,11 +197,11 @@ def run_subtitle_app():
             else:
                 st.info(f"🔄 កំពុងដំណើរការឯកសារ {uploaded_file.name}... សូមរង់ចាំបន្តិច!")
                 
-                # បង្កើត Spinner ត្រាប់តាមការងារពិត
+                # បង្កើត Progress bar ស្អាត
                 progress_bar = st.progress(0)
                 with st.spinner("ប្រព័ន្ធ AI កំពុងដំណើរការ..."):
                     for i in range(1, 101, 20):
-                        time.sleep(0.5)  # ធ្វើពុតជាកំពុងដំណើរការ
+                        time.sleep(0.5)
                         progress_bar.progress(i)
                     
                 st.success("🎉 ដំណើរការបកប្រែជោគជ័យ!")
@@ -189,7 +212,6 @@ def run_subtitle_app():
             st.divider()
             st.markdown("#### 📄 លទ្ធផលទទួលបានពី AI (គំរូ)")
             
-            # ឧទាហរណ៍អត្ថបទដែលបកប្រែរួច
             sample_translated_text = (
                 "1\n00:00:01,000 --> 00:00:04,000\nសួស្តីអ្នកទាំងអស់គ្នា! សូមស្វាគមន៍មកកាន់ការទស្សនា។\n\n"
                 "2\n00:00:04,500 --> 00:00:08,000\nថ្ងៃនេះយើងនឹងជជែកគ្នាអំពីបច្ចេកវិទ្យាបញ្ញាសិប្បនិម្មិត AI។"
@@ -197,7 +219,6 @@ def run_subtitle_app():
             
             st.text_area("អត្ថបទ Subtitle ជាភាសាខ្មែរ៖", value=sample_translated_text, height=150)
             
-            # ប៊ូតុងទាញយកឯកសារ
             st.download_button(
                 label="📥 ទាញយកឯកសារបកប្រែរួច (.srt)",
                 data=sample_translated_text,
@@ -207,17 +228,15 @@ def run_subtitle_app():
             )
 
     # ------------------------------------------
-    # លក្ខខណ្ឌទី ២៖ ប្រសិនបើជ្រើសរើស "⚙️ ការកំណត់"
+    # លក្ខខណ្ឌទី ២៖ ផ្ទាំង "⚙️ ការកំណត់"
     # ------------------------------------------
     elif menu_option == "⚙️ ការកំណត់":
-        # ផ្ទាំងទទេស្អាតសម្រាប់កូដកំណត់ប្រព័ន្ធ (Settings)
         st.markdown('<div class="main-title">ការកំណត់ប្រព័ន្ធ</div>', unsafe_allow_html=True)
         st.markdown('<div class="sub-title">គ្រប់គ្រងគណនី និងការកំណត់ API សម្រាប់ការបកប្រែ</div>', unsafe_allow_html=True)
         
         with st.container():
             st.markdown("#### ⚙️ កម្រងព័ត៌មាន និង API Keys")
             
-            # បង្កើតប្រអប់បញ្ចូលទិន្នន័យស្អាតៗ
             with st.form("settings_form"):
                 st.text_input("🔑 Google Gemini API Key:", type="password", placeholder="បញ្ចូល API Key របស់ Gemini នៅទីនេះ")
                 st.text_input("🔑 OpenAI API Key:", type="password", placeholder="បញ្ចូល API Key របស់ OpenAI នៅទីនេះ")
@@ -233,11 +252,8 @@ def run_subtitle_app():
 
 # ហៅមកប្រើប្រាស់
 if __name__ == "__main__":
-    # បង្កើត session_state ជាគំរូសម្រាប់ការតេស្ត
     if 'logged_in' not in st.session_state:
         st.session_state.logged_in = True
         
     if st.session_state.logged_in:
         run_subtitle_app()
-    else:
-        st.write("សូមចូលប្រព័ន្ធម្តងទៀត។")
