@@ -2,7 +2,7 @@ import streamlit as st
 import time
 
 def run_subtitle_app():
-    # --- 🎨 កំណត់ Font អក្សរខ្មែរឱ្យស្អាតគ្រប់ជ្រុងទាំងអស់ ---
+    # --- 🎨 កំណត់ Font អក្សរខ្មែរ និង CSS តុបតែង Sidebar Menu ---
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro:wght@300;400;700&display=swap');
@@ -51,21 +51,62 @@ def run_subtitle_app():
         background-color: #1557b0 !important;
     }
 
-    /* បន្ថែមរចនាបថលើ Tabs ឱ្យកាន់តែស្អាត */
-    button[data-baseweb="tab"] {
-        font-family: 'Kantumruy Pro', sans-serif !important;
+    /* 🛠️ កែច្នៃវិទ្យុ (Radio Button) ក្នុង Sidebar ឱ្យទៅជាប៊ូតុងម៉ឺនុយបញ្ជាស្អាត */
+    div[data-testid="stSidebar"] div[data-testid="stRadio"] {
+        padding: 10px 0px;
+    }
+    div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] {
+        gap: 10px;
+        flex-direction: column;
+    }
+    div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label {
+        background-color: #f0f2f6;
+        padding: 12px 16px !important;
+        border-radius: 8px !important;
+        border: 1px solid #e0e0e0;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        width: 100%;
+    }
+    div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label:hover {
+        background-color: #e4e6eb;
+        border-color: #ccd0d5;
+    }
+    /* នៅពេលចុចជ្រើសរើស ឱ្យវាឡើងពណ៌ខៀវលេចធ្លោ */
+    div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label[data-checked="true"] {
+        background-color: #1a73e8 !important;
+        border-color: #1a73e8 !important;
+    }
+    div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label[data-checked="true"] span {
+        color: white !important;
         font-weight: bold !important;
-        font-size: 16px !important;
+    }
+    /* លាក់រង្វង់មូលមូលនៃ Radio Button */
+    div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] [data-testid="stHighlightContainer"] {
+        display: none !important;
+    }
+    div[data-testid="stSidebar"] div[data-testid="stRadio"] div[role="radiogroup"] label div:first-child {
+        display: none !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
     # ==========================================
-    # របារចំហៀង (Sidebar) - រក្សាទុកដដែលទាំងស្រុង
+    # របារចំហៀង (Sidebar)
     # ==========================================
     with st.sidebar:
         st.markdown("### 🟢 គណនីរបស់អ្នក")
         st.success("ស្ថានភាព៖ កំពុងប្រើប្រាស់")
+        
+        st.write("") # បន្ថែមគម្លាត
+        
+        # 🎯 ម៉ឺនុយបញ្ជាផ្ទាំងការងារ (ស្ថិតនៅក្នុង Sidebar តាមស្នើសុំរបស់បង)
+        st.markdown("#### 🗺️ ម៉ឺនុយបញ្ជា")
+        menu_option = st.radio(
+            "សូមជ្រើសរើសផ្ទាំង៖",
+            ["🎙️ បកប្រែសំឡេងទៅជាអក្សរ", "⚙️ ការកំណត់"],
+            label_visibility="collapsed" # លាក់ចំណងជើងសរសេរដើម្បីកុំឱ្យរញ៉េរញ៉ៃ
+        )
         
         # បន្ថែម Line break ឱ្យស្រឡះភ្នែក
         st.write("") 
@@ -74,18 +115,16 @@ def run_subtitle_app():
             st.rerun()
 
     # ==========================================
-    # ផ្ទាំងកណ្តាល (Main Workflow)
+    # ផ្ទាំងកណ្តាល (Main Workflow Logic)
     # ==========================================
-    st.markdown('<div class="main-title">ប្រព័ន្ធបកប្រែ Subtitle & សំឡេង</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-title">bម្លែងឯកសារសំឡេង ឬ Subtitle ទៅជាភាសាខ្មែរដោយស្វ័យប្រវត្តិជាមួយ AI</div>', unsafe_allow_html=True)
-
-    # បង្កើតប៊ូតុង Tab នៅផ្នែកខាងលើ
-    tab_translate, tab_settings = st.tabs(["🎙️ បកប្រែសំឡេងទៅជាអក្សរ", "⚙️ ការកំណត់"])
-
+    
     # ------------------------------------------
-    # Tab ទី ១៖ ផ្ទាំងការងារបកប្រែ (រក្សាទុកកូដចាស់បងទាំងអស់)
+    # លក្ខខណ្ឌទី ១៖ ប្រសិនបើជ្រើសរើស "🎙️ បកប្រែសំឡេងទៅជាអក្សរ"
     # ------------------------------------------
-    with tab_translate:
+    if menu_option == "🎙️ បកប្រែសំឡេងទៅជាអក្សរ":
+        st.markdown('<div class="main-title">ប្រព័ន្ធបកប្រែ Subtitle & សំឡេង</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sub-title">បម្លែងឯកសារសំឡេង ឬ Subtitle ទៅជាភាសាខ្មែរដោយស្វ័យប្រវត្តិជាមួយ AI</div>', unsafe_allow_html=True)
+
         # --- ផ្នែកទី ១៖ បញ្ចូលឯកសារ ---
         st.markdown("#### 📂 ជំហានទី ១៖ បញ្ចូលឯកសារ")
         uploaded_file = st.file_uploader(
@@ -126,7 +165,6 @@ def run_subtitle_app():
         # --- ផ្នែកទី ៣៖ ប៊ូតុងបញ្ជា (Action) ---
         st.markdown("#### 🚀 ជំហានទី ៣៖ ចាប់ផ្ដើមប្រតិបត្តិការ")
         
-        # បង្កើត state សម្រាប់រក្សាទុកលទ្ធផលកុំឱ្យបាត់ពេលទាញយក (Download)
         if 'processing_done' not in st.session_state:
             st.session_state.processing_done = False
 
@@ -138,14 +176,14 @@ def run_subtitle_app():
                 
                 # បង្កើត Spinner ត្រាប់តាមការងារពិត
                 progress_bar = st.progress(0)
-                with st.spinner("ប្រព័ន្ធ AI កំពុងធ្វើការបកប្រែ..."):
+                with st.spinner("ប្រព័ន្ធ AI កំពុងដំណើរការ..."):
                     for i in range(1, 101, 20):
-                        time.sleep(0.4)  # ធ្វើពុតជាកំពុងដំណើរការ
+                        time.sleep(0.5)  # ធ្វើពុតជាកំពុងដំណើរការ
                         progress_bar.progress(i)
                     
-                st.success("🎉 ដំណើរការបកប្រែជោគជ័យ! (ត្រៀមចូលវគ្គកូដ AI ពិតប្រាកដ)")
+                st.success("🎉 ដំណើរការបកប្រែជោគជ័យ!")
                 st.session_state.processing_done = True
-
+                
         # --- ផ្នែកទី ៤៖ បង្ហាញលទ្ធផល និងទាញយក ---
         if st.session_state.processing_done and uploaded_file:
             st.divider()
@@ -154,7 +192,7 @@ def run_subtitle_app():
             # ឧទាហរណ៍អត្ថបទដែលបកប្រែរួច
             sample_translated_text = (
                 "1\n00:00:01,000 --> 00:00:04,000\nសួស្តីអ្នកទាំងអស់គ្នា! សូមស្វាគមន៍មកកាន់ការទស្សនា។\n\n"
-                "2\n00:00:04,500 --> 00:00:08,000\nថ្ងៃនេះយើងនឹងជជែកគ្នាអំពីបច្គេកវិទ្យាបញ្ញាសិប្បនិម្មិត AI។"
+                "2\n00:00:04,500 --> 00:00:08,000\nថ្ងៃនេះយើងនឹងជជែកគ្នាអំពីបច្ចេកវិទ្យាបញ្ញាសិប្បនិម្មិត AI។"
             )
             
             st.text_area("អត្ថបទ Subtitle ជាភាសាខ្មែរ៖", value=sample_translated_text, height=150)
@@ -169,25 +207,29 @@ def run_subtitle_app():
             )
 
     # ------------------------------------------
-    # Tab ទី ២៖ ផ្ទាំងការកំណត់ (ផ្ទាំងសស្អាតថ្មីតាមការចង់បាន)
+    # លក្ខខណ្ឌទី ២៖ ប្រសិនបើជ្រើសរើស "⚙️ ការកំណត់"
     # ------------------------------------------
-    with tab_settings:
-        st.markdown("#### ⚙️ ការកំណត់ប្រព័ន្ធ (System Settings)")
-        st.write("សូមកំណត់តម្លៃផ្សេងៗសម្រាប់ដំណើរការម៉ាស៊ីន AI របស់អ្នកនៅទីនេះ៖")
+    elif menu_option == "⚙️ ការកំណត់":
+        # ផ្ទាំងទទេស្អាតសម្រាប់កូដកំណត់ប្រព័ន្ធ (Settings)
+        st.markdown('<div class="main-title">ការកំណត់ប្រព័ន្ធ</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sub-title">គ្រប់គ្រងគណនី និងការកំណត់ API សម្រាប់ការបកប្រែ</div>', unsafe_allow_html=True)
         
-        # បង្កើត Form សម្រាប់កំណត់ Keys ផ្សេងៗ
-        with st.form("settings_form"):
-            st.markdown("##### 🔑 គ្រាប់ចុចសម្ងាត់ (API Keys)")
-            gemini_key = st.text_input("Google Gemini API Key:", type="password", placeholder="AIzaSy...")
-            openai_key = st.text_input("OpenAI API Key:", type="password", placeholder="sk-proj-...")
+        with st.container():
+            st.markdown("#### ⚙️ កម្រងព័ត៌មាន និង API Keys")
             
-            st.markdown("##### 🌍 ការកំណត់ភាសា និងដំណើរការ")
-            target_lang = st.selectbox("ភាសាគោលដៅសម្រាប់ការបកប្រែ៖", ["ភាសាខ្មែរ (Khmer)", "ភាសាអង់គ្លេស (English)"])
-            temperature = st.slider("កម្រិតភាពច្នៃប្រឌិតរបស់ AI (Temperature):", min_value=0.0, max_value=1.0, value=0.3, step=0.1)
-            
-            submit_btn = st.form_submit_button("រក្សាទុកការកំណត់")
-            if submit_btn:
-                st.toast("💾 រក្សាទុកការកំណត់បានជោគជ័យ!", icon="✅")
+            # បង្កើតប្រអប់បញ្ចូលទិន្នន័យស្អាតៗ
+            with st.form("settings_form"):
+                st.text_input("🔑 Google Gemini API Key:", type="password", placeholder="បញ្ចូល API Key របស់ Gemini នៅទីនេះ")
+                st.text_input("🔑 OpenAI API Key:", type="password", placeholder="បញ្ចូល API Key របស់ OpenAI នៅទីនេះ")
+                
+                st.divider()
+                st.markdown("##### ⚙️ ការកំណត់ទូទៅ")
+                st.selectbox("ជ្រើសរើសភាសាចំណុចប្រទាក់ (Interface Language)", ["ភាសាខ្មែរ", "English"])
+                st.checkbox("ចងចាំការកំណត់នៅលើកម្មវិធីនេះ", value=True)
+                
+                save_btn = st.form_submit_button("រក្សាទុកការកំណត់")
+                if save_btn:
+                    st.toast("💾 រក្សាទុកការកំណត់បានជោគជ័យ!", icon="✅")
 
 # ហៅមកប្រើប្រាស់
 if __name__ == "__main__":
