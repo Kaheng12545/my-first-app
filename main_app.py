@@ -54,62 +54,68 @@ def run_subtitle_app():
     }
 
     /* ---------------------------------------------------------------- */
-    /* 🚀 ផ្នែកកូដបង្ខំពង្រីកប្រអប់ Uploader ឱ្យទៅជាចតុកោណកែងធំ និងកណ្តាល */
+    /* 🚀 ផ្នែកកែប្រអប់ Uploader: ពង្រីកផ្ទៃពណ៌ខ្មៅឱ្យធំ និងដាក់ចំកណ្តាល */
     /* ---------------------------------------------------------------- */
-    
+
     .stFileUploader {
         background-color: transparent !important;
     }
 
-    /* កែសម្រួលប្រអប់ Dropzone ឱ្យរីកធំជាចតុកោណកែងធំ (កម្ពស់ 260px) និងពណ៌កញ្ចក់សថ្លាស្អាត */
+    /* ១. ពង្រីកប្រអប់ Dropzone (ផ្ទៃខ្មៅ) ឱ្យធំទូលាយ និងរុញរបស់នៅខាងក្នុងឱ្យចំកណ្តាល */
     div[data-testid="stFileUploaderDropzone"] {
-        background-color: rgba(221, 227, 240, 0.95) !important; /* ពណ៌កញ្ចក់សថ្លាស្អាត */
-        background: rgba(221, 227, 240, 0.95) !important;
-        border: 2px dashed #6366F1 !important; /* គែមឆ្នូតៗ */
+        background-color: #1E293B !important; /* ផ្ទៃពណ៌ខ្មៅព្រិលៗ */
+        border: 2px dashed #475569 !important; /* បន្ទាត់គែម */
         border-radius: 16px !important;
-        padding: 60px 20px !important; /* ពង្រីកឱ្យទៅជាចតុកោណកែងធំ */
-        min-height: 250px !important;
-        text-align: center !important;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+        min-height: 250px !important; /* កំណត់កម្ពស់ប្រអប់ឱ្យធំ */
+        padding: 40px !important;
         display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
+        flex-direction: column !important;   /* តម្រៀបប៊ូតុង និងអក្សរលើក្រោម */
+        align-items: center !important;      /* រុញចំកណ្តាល (ឆ្វេងស្តាំ) */
+        justify-content: center !important;  /* រុញចំកណ្តាល (លើក្រោម) */
+        width: 100% !important;
     }
 
-    /* ពេលដាក់ Mouse ពីលើ */
+    /* ពេលយក Mouse ទៅដាក់ពីលើប្រអប់ */
     div[data-testid="stFileUploaderDropzone"]:hover {
-        background-color: rgba(255, 255, 255, 0.98) !important;
-        background: rgba(255, 255, 255, 0.98) !important;
         border-color: #3B82F6 !important;
+        background-color: #0F172A !important;
     }
 
-    /* ---------------------------------------------------------------- */
-    /* 🔒 កូដពិសេស៖ លុបបំបាត់ការជាន់គ្នា "upload upload" ពីកម្មវិធីបកប្រែភាសា */
-    /* ---------------------------------------------------------------- */
-    
-    /* លាក់អត្ថបទចាស់របស់ប៊ូតុងចោលទាំងស្រុង ដើម្បីការពារកុំឱ្យកម្មវិធីបកប្រែភាសាទៅបកប្រែជាន់គ្នា */
-    div[data-testid="stFileUploaderDropzone"] button span,
-    div[data-testid="stFileUploaderDropzone"] button div {
-        display: none !important;
+    /* 🔒 ២. លាក់អក្សរអង់គ្លេសចាស់ ឬអក្សរដែលលោតជាន់គ្នា (សំខាន់បំផុត!) */
+    div[data-testid="stFileUploaderDropzone"] button * {
+        display: none !important; /* លាក់អ្វីៗទាំងអស់ដែល Streamlit ឬ Google Translate បង្កើតក្នុងប៊ូតុង */
     }
 
-    /* ជំនួសមកវិញនូវអត្ថបទថ្មីតាមរយៈ CSS Content ដែលមិនអាចជាន់គ្នាជាដាច់ខាត */
+    /* ៣. រចនាប៊ូតុង Upload ថ្មី និងរុញអក្សរឱ្យនៅចំកណ្តាលប៊ូតុង */
+    div[data-testid="stFileUploaderDropzone"] button {
+        background: linear-gradient(135deg, #6366F1 0%, #3B82F6 100%) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 14px 40px !important; /* ពង្រីកប៊ូតុងឱ្យវែងបន្តិច */
+        cursor: pointer !important;
+        display: flex !important;
+        justify-content: center !important; /* រុញអក្សរចំកណ្តាលប៊ូតុង */
+        align-items: center !important;
+    }
+
+    /* បញ្ចូលអក្សរខ្មែរទៅក្នុងប៊ូតុងយ៉ាងមានសុវត្ថិភាព */
     div[data-testid="stFileUploaderDropzone"] button::after {
-        content: "📥 ជ្រើសរើសឯកសារ (Browse Files)" !important;
+        content: "📥 ចុចទីនេះដើម្បីបញ្ចូលឯកសារ" !important;
         font-family: 'Kantumruy Pro', sans-serif !important;
-        font-size: 15px !important;
+        font-size: 16px !important;
         color: #FFFFFF !important;
         font-weight: bold !important;
         display: block !important;
     }
 
-    /* កំណត់ពណ៌អក្សរណែនាំទាំងអស់ក្នុងប្រអប់ឱ្យពណ៌ក្រម៉ៅងាយមើលលើផ្ទៃសថ្លា */
-    div[data-testid="stFileUploaderDropzone"] span,
+    /* ៤. កំណត់អក្សរ (Limit 200MB) ឱ្យនៅចំកណ្តាលខាងក្រោមប៊ូតុង */
     div[data-testid="stFileUploaderDropzone"] small {
-        color: #1E293B !important; 
+        color: #94A3B8 !important; 
         font-weight: 500 !important;
         font-size: 14px !important;
+        margin-top: 20px !important; /* រុញឱ្យឆ្ងាយពីប៊ូតុងបន្តិច */
+        text-align: center !important;
+        display: block !important;
     }
 
     /* ---------------------------------------------------------------- */
