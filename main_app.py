@@ -2,7 +2,7 @@ import streamlit as st
 import time
 
 def run_subtitle_app():
-    # --- 🎨 កូដ CSS សម្រាប់កែច្នៃកម្មវិធី និងប្រអប់ឯកសារ (Premium Glass File Uploader) ---
+    # --- 🎨 កូដ CSS ពិសេស៖ បង្ខំឱ្យប្រអប់ Uploader ចេញរាងចតុកោណកែងធំ ចំកណ្តាល និងមានពណ៌កញ្ចក់ថ្លា ---
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro:wght@300;400;500;700&display=swap');
@@ -17,13 +17,13 @@ def run_subtitle_app():
         background-color: #0F172A !important;
     }
 
-    /* របារចំហៀង Sidebar ឱ្យកាន់តែរលោង */
+    /* របារចំហៀង Sidebar */
     section[data-testid="stSidebar"] {
         background-color: #0B0F19 !important;
         border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
     }
 
-    /* ចំណងជើងកម្មវិធី (Premium Typography) */
+    /* ចំណងជើងកម្មវិធី */
     .main-title {
         text-align: center;
         font-family: 'Khmer OS Muol Light', sans-serif !important;
@@ -53,63 +53,78 @@ def run_subtitle_app():
     }
 
     /* ---------------------------------------------------------------- */
-    /* 🛠️ កូដកែច្នៃប្រអប់ File Uploader ឱ្យទៅជាចតុកោណកែងពណ៌សថ្លាកណ្ដាល ស្អាត Premium */
+    /* 🔥 ផ្នែកកូដបង្ខំកែសម្រួល File Uploader ឱ្យចេញរាងចតុកោណកែងធំ ចំកណ្តាល (Strict Override) */
     /* ---------------------------------------------------------------- */
-    .stFileUploader {
+    
+    /* លុបផ្ទៃខាងក្រោយខ្មៅដើមរបស់ Streamlit Uploader ចេញឱ្យអស់ */
+    .stFileUploader, div[data-testid="stFileUploader"] {
         background-color: transparent !important;
         border: none !important;
         padding: 0px !important;
-    }
-    
-    /* កែច្នៃប្រអប់ Dropzone (ប្រអប់អូសទម្លាក់) */
-    div[data-testid="stFileUploaderDropzone"] {
-        background-color: rgba(255, 255, 255, 0.85) !important; /* ពណ៌សថ្លាបែបកញ្ចក់ */
-        border: 2px dashed #6366F1 !important; /* គែមឆ្នូតៗពណ៌ស្វាយ */
-        border-radius: 16px !important;
-        min-height: 200px !important; /* បង្កើនកម្ពស់ឱ្យទៅជាចតុកោណកែងធំ */
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important; /* តម្រឹមទៅកណ្តាល */
-        justify-content: center !important; /* តម្រឹមទៅកណ្តាល */
-        text-align: center !important;
-        transition: all 0.3s ease-in-out !important;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
-    }
-    
-    /* ពេលអូសឯកសារមកលើ ឱ្យដូរពណ៌ស្អាត */
-    div[data-testid="stFileUploaderDropzone"]:hover {
-        background-color: rgba(255, 255, 255, 0.95) !important;
-        border-color: #3B82F6 !important;
-        box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2) !important;
+        display: block !important;
+        width: 100% !important;
     }
 
-    /* តម្រឹមប៊ូតុង និងអក្សរក្នុងប្រអប់ឱ្យចំកណ្តាល */
+    /* បង្ខំឱ្យចេញរាងចតុកោណកែងធំ (កម្ពស់ 280px) និងពណ៌កញ្ចក់ថ្លាស្អាត */
+    div[data-testid="stFileUploaderDropzone"] {
+        background-color: rgba(221, 227, 240, 0.95) !important; /* ពណ៌កញ្ចក់សថ្លា */
+        border: 2px dashed #6366F1 !important; /* គែមឆ្នូតៗ */
+        border-radius: 16px !important;
+        height: 280px !important; /* កម្ពស់ធំដូចរូបដែលបងចង់បាន */
+        min-height: 280px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important; /* រត់ទៅចំកណ្តាលឆ្វេងស្តាំ */
+        justify-content: center !important; /* រត់ទៅចំកណ្តាលលើក្រោម */
+        text-align: center !important;
+        transition: all 0.3s ease-in-out !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+        padding: 30px !important;
+    }
+
+    /* ពេលអូស Mouse ពីលើ */
+    div[data-testid="stFileUploaderDropzone"]:hover {
+        background-color: rgba(255, 255, 255, 0.98) !important;
+        border-color: #3B82F6 !important;
+        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.25) !important;
+    }
+
+    /* រៀបចំរចនាសម្ព័ន្ធខាងក្នុងឱ្យរត់ចំកណ្តាលបេះបិទ */
     div[data-testid="stFileUploaderDropzone"] > div {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 12px !important;
+        gap: 15px !important;
         width: 100% !important;
+        height: 100% !important;
+        background: none !important; /* លុបពណ៌ខ្មៅផ្តេកចេញ */
+        border: none !important;
     }
 
-    /* កែច្នៃប៊ូតុង Browse Files ក្នុងប្រអប់ */
+    /* បង្ខំប៊ូតុង Browse Files ឱ្យចំកណ្តាល និងធំស្អាត */
     div[data-testid="stFileUploaderDropzone"] button {
         background: linear-gradient(135deg, #6366F1 0%, #3B82F6 100%) !important;
         color: #FFFFFF !important;
         border: none !important;
-        padding: 10px 24px !important;
+        padding: 12px 30px !important; /* ប៊ូតុងធំជាងមុន */
         border-radius: 8px !important;
         font-weight: bold !important;
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2) !important;
-        font-size: 14px !important;
+        font-size: 15px !important;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
+        margin: 0 auto !important; /* ចំកណ្តាល */
+        display: inline-block !important;
     }
 
-    /* កែច្នៃពណ៌អក្សរណែនាំក្នុងប្រអប់ឱ្យពណ៌ក្រម៉ៅស្រួលមើលលើផ្ទៃស */
+    /* កំណត់ពណ៌អក្សរណែនាំទាំងអស់ក្នុងប្រអប់ឱ្យពណ៌ក្រម៉ៅងាយមើលលើផ្ទៃស */
     div[data-testid="stFileUploaderDropzone"] span,
     div[data-testid="stFileUploaderDropzone"] small {
-        color: #1E293B !important; /* ពណ៌ប្រផេះចាស់ */
+        color: #1E293B !important; 
         font-weight: 500 !important;
+        font-size: 14px !important;
+        text-align: center !important;
+        margin: 0 auto !important;
+        display: block !important;
     }
 
     /* ---------------------------------------------------------------- */
@@ -201,7 +216,7 @@ def run_subtitle_app():
     </style>
     """, unsafe_allow_html=True)
 
-    # --- បង្កើត State សម្រាប់គ្រប់គ្រងផ្ទាំងការងារ (Navigation State) ---
+    # --- បង្កើត State សម្រាប់គ្រប់គ្រងផ្ទាំងការងារ ---
     if 'current_tab' not in st.session_state:
         st.session_state.current_tab = "translate"
 
@@ -257,7 +272,7 @@ def run_subtitle_app():
         # --- ផ្នែកទី ១៖ បញ្ចូលឯកសារ ---
         st.markdown("<h4 style='color: #F8FAFC;'>📂 ជំហានទី ១៖ បញ្ចូលឯកសារ</h4>", unsafe_allow_html=True)
         
-        # ប្រើប្រាស់ Key ដើម្បីអាចសម្អាត File Uploader ឡើងវិញបានងាយស្រួល
+        # ប្រើប្រាស់ Key ដើម្បីគ្រប់គ្រងការសម្អាតឯកសារ
         uploaded_file = st.file_uploader(
             "សូមទាញឯកសារទម្លាក់ទីនេះ (គាំទ្រ៖ MP3, WAV, M4A, SRT)", 
             type=['mp3', 'wav', 'm4a', 'srt'],
@@ -268,7 +283,7 @@ def run_subtitle_app():
         if uploaded_file:
             file_type = uploaded_file.name.split('.')[-1].lower()
             
-            # បង្កើតជួរដេក៖ ឆ្វេងបង្ហាញដំណឹងជោគជ័យ ស្តាំជាប៊ូតុងលុបចោលពណ៌ក្រហម (🗑️ លុបចោល)
+            # ប៊ូតុងលុបចោលពណ៌ក្រហម (🗑️ លុបចោល)
             col_success, col_delete = st.columns([5, 1])
             with col_success:
                 st.success(f"✅ ឯកសារទទួលបានជោគជ័យ៖ {uploaded_file.name}")
@@ -317,3 +332,64 @@ def run_subtitle_app():
                 st.warning("⚠️ សូមបញ្ចូលឯកសារនៅ [ជំហានទី ១] សិន មុននឹងបន្ត!")
             else:
                 st.info(f"🔄 កំពុងដំណើរការឯកសារ {uploaded_file.name}... សូមរង់ចាំបន្តិច!")
+                
+                progress_bar = st.progress(0)
+                with st.spinner("ប្រព័ន្ធ AI កំពុងដំណើរការ..."):
+                    for i in range(1, 101, 20):
+                        time.sleep(0.4)
+                        progress_bar.progress(i)
+                    
+                st.success("🎉 ដំណើរការបកប្រែជោគជ័យ!")
+                st.session_state.processing_done = True
+        st.markdown('</div>', unsafe_allow_html=True)
+                
+        # --- ផ្នែកទី ៤៖ បង្ហាញលទ្ធផល និងទាញយក ---
+        if st.session_state.processing_done and uploaded_file:
+            st.divider()
+            st.markdown("<h4 style='color: #F8FAFC;'>📄 លទ្ធផលទទួលបានពី AI (គំរូ)</h4>", unsafe_allow_html=True)
+            
+            sample_translated_text = (
+                "1\n00:00:01,000 --> 00:00:04,000\nសួស្តីអ្នកទាំងអស់គ្នា! សូមស្វាគមន៍មកកាន់ការទស្សនា។\n\n"
+                "2\n00:00:04,500 --> 00:00:08,000\nថ្ងៃនេះយើងនឹងជជែកគ្នាអំពីបច្ចេកវិទ្យាបញ្ញាសិប្បនិម្មិត AI។"
+            )
+            
+            st.text_area("អត្ថបទ Subtitle ជាភាសាខ្មែរ៖", value=sample_translated_text, height=150)
+            
+            st.download_button(
+                label="📥 ទាញយកឯកសារបកប្រែរួច (.srt)",
+                data=sample_translated_text,
+                file_name=f"translated_{uploaded_file.name.split('.')[0]}.srt",
+                mime="text/plain",
+                use_container_width=True
+            )
+
+    # ------------------------------------------
+    # លក្ខខណ្ឌទី ២៖ ផ្ទាំង "⚙️ ការកំណត់"
+    # ------------------------------------------
+    elif st.session_state.current_tab == "settings":
+        st.markdown('<div class="main-title">ការកំណត់ប្រព័ន្ធ</div>', unsafe_allow_html=True)
+        st.markdown('<div class="sub-title">គ្រប់គ្រងគណនី និងការកំណត់ API សម្រាប់ការបកប្រែ</div>', unsafe_allow_html=True)
+        
+        with st.container():
+            st.markdown("<h4 style='color: #F8FAFC;'>⚙️ កម្រងព័ត៌មាន និង API Keys</h4>", unsafe_allow_html=True)
+            
+            with st.form("settings_form"):
+                st.text_input("🔑 Google Gemini API Key:", type="password", placeholder="បញ្ចូល API Key របស់ Gemini នៅទីនេះ")
+                st.text_input("🔑 OpenAI API Key:", type="password", placeholder="បញ្ចូល API Key របស់ OpenAI នៅទីនេះ")
+                
+                st.divider()
+                st.markdown("<h5 style='color: #E2E8F0;'>⚙️ ការកំណត់ទូទៅ</h5>", unsafe_allow_html=True)
+                st.selectbox("ជ្រើសរើសភាសាចំណុចប្រទាក់ (Interface Language)", ["ភាសាខ្មែរ", "English"])
+                st.checkbox("ចងចាំការកំណត់នៅលើកម្មវិធីនេះ", value=True)
+                
+                save_btn = st.form_submit_button("រក្សាទុកការកំណត់")
+                if save_btn:
+                    st.toast("💾 រក្សាទុកការកំណត់បានជោគជ័យ!", icon="✅")
+
+# ហៅមកប្រើប្រាស់
+if __name__ == "__main__":
+    if 'logged_in' not in st.session_state:
+        st.session_state.logged_in = True
+        
+    if st.session_state.logged_in:
+        run_subtitle_app()
