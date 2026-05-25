@@ -2,7 +2,8 @@ import streamlit as st
 import time
 
 def run_subtitle_app():
-    # --- 🎨 កូដ CSS ពិសេស៖ ការពារការជាន់អក្សរពីកម្មវិធីបកប្រែភាសា និងពង្រីកប្រអប់ឱ្យធំស្អាត ---
+    # --- 🎨 កូដ CSS ---
+    # លុបកូដដែលទាក់ទងនឹងការដូរអក្សរ Uploader ចោលទាំងស្រុង!
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro:wght@300;400;500;700&display=swap');
@@ -23,7 +24,7 @@ def run_subtitle_app():
         border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
     }
 
-    /* ចំណងជើងកម្មវិធី (ភាសាខ្មែរសុទ្ធសាធ) */
+    /* ចំណងជើងកម្មវិធី */
     .main-title {
         text-align: center;
         font-family: 'Khmer OS Muol Light', sans-serif !important;
@@ -54,68 +55,17 @@ def run_subtitle_app():
     }
 
     /* ---------------------------------------------------------------- */
-    /* 🚀 ផ្នែកកែប្រអប់ Uploader: ពង្រីកផ្ទៃពណ៌ខ្មៅឱ្យធំ និងដាក់ចំកណ្តាល */
+    /* 🚀 ទុកត្រឹមតែពណ៌ Background ឱ្យ Uploader កុំឱ្យវាដាច់ពណ៌ពីគេពេក 
+         លែងប៉ះពាល់ប៊ូតុង ឬអក្សរខាងក្នុងវាទៀតហើយ! */
     /* ---------------------------------------------------------------- */
-
-    .stFileUploader {
-        background-color: transparent !important;
-    }
-
-    /* ១. ពង្រីកប្រអប់ Dropzone (ផ្ទៃខ្មៅ) ឱ្យធំទូលាយ និងរុញរបស់នៅខាងក្នុងឱ្យចំកណ្តាល */
     div[data-testid="stFileUploaderDropzone"] {
-        background-color: #1E293B !important; /* ផ្ទៃពណ៌ខ្មៅព្រិលៗ */
-        border: 2px dashed #475569 !important; /* បន្ទាត់គែម */
-        border-radius: 16px !important;
-        min-height: 250px !important; /* កំណត់កម្ពស់ប្រអប់ឱ្យធំ */
-        padding: 40px !important;
-        display: flex !important;
-        flex-direction: column !important;   /* តម្រៀបប៊ូតុង និងអក្សរលើក្រោម */
-        align-items: center !important;      /* រុញចំកណ្តាល (ឆ្វេងស្តាំ) */
-        justify-content: center !important;  /* រុញចំកណ្តាល (លើក្រោម) */
-        width: 100% !important;
+        background-color: #1E293B !important; 
+        border: 2px dashed #475569 !important; 
+        border-radius: 12px !important;
+        padding: 30px !important;
     }
-
-    /* ពេលយក Mouse ទៅដាក់ពីលើប្រអប់ */
     div[data-testid="stFileUploaderDropzone"]:hover {
         border-color: #3B82F6 !important;
-        background-color: #0F172A !important;
-    }
-
-    /* 🔒 ២. លាក់អក្សរអង់គ្លេសចាស់ ឬអក្សរដែលលោតជាន់គ្នា (សំខាន់បំផុត!) */
-    div[data-testid="stFileUploaderDropzone"] button * {
-        display: none !important; /* លាក់អ្វីៗទាំងអស់ដែល Streamlit ឬ Google Translate បង្កើតក្នុងប៊ូតុង */
-    }
-
-    /* ៣. រចនាប៊ូតុង Upload ថ្មី និងរុញអក្សរឱ្យនៅចំកណ្តាលប៊ូតុង */
-    div[data-testid="stFileUploaderDropzone"] button {
-        background: linear-gradient(135deg, #6366F1 0%, #3B82F6 100%) !important;
-        border: none !important;
-        border-radius: 8px !important;
-        padding: 14px 40px !important; /* ពង្រីកប៊ូតុងឱ្យវែងបន្តិច */
-        cursor: pointer !important;
-        display: flex !important;
-        justify-content: center !important; /* រុញអក្សរចំកណ្តាលប៊ូតុង */
-        align-items: center !important;
-    }
-
-    /* បញ្ចូលអក្សរខ្មែរទៅក្នុងប៊ូតុងយ៉ាងមានសុវត្ថិភាព */
-    div[data-testid="stFileUploaderDropzone"] button::after {
-        content: "📥 ចុចទីនេះដើម្បីបញ្ចូលឯកសារ" !important;
-        font-family: 'Kantumruy Pro', sans-serif !important;
-        font-size: 16px !important;
-        color: #FFFFFF !important;
-        font-weight: bold !important;
-        display: block !important;
-    }
-
-    /* ៤. កំណត់អក្សរ (Limit 200MB) ឱ្យនៅចំកណ្តាលខាងក្រោមប៊ូតុង */
-    div[data-testid="stFileUploaderDropzone"] small {
-        color: #94A3B8 !important; 
-        font-weight: 500 !important;
-        font-size: 14px !important;
-        margin-top: 20px !important; /* រុញឱ្យឆ្ងាយពីប៊ូតុងបន្តិច */
-        text-align: center !important;
-        display: block !important;
     }
 
     /* ---------------------------------------------------------------- */
@@ -212,13 +162,12 @@ def run_subtitle_app():
         st.session_state.current_tab = "translate"
 
     # ==========================================
-    # របារចំហៀង (Sidebar) - លុបប្រអប់ "គណនីរបស់អ្នក" ចេញស្អាតដាច់ស្រឡះ
+    # របារចំហៀង (Sidebar)
     # ==========================================
     with st.sidebar:
         st.write("") 
         st.markdown("<h4 style='color: #94A3B8 !important; margin-bottom: 10px;'>🗺️ ម៉ឺនុយបញ្ជា</h4>", unsafe_allow_html=True)
         
-        # ម៉ឺនុយបញ្ជា (SaaS Side Tabs)
         if st.button(
             "🎙️ បកប្រែសំឡេងទៅជាអក្សរ", 
             key="btn_translate", 
@@ -240,7 +189,6 @@ def run_subtitle_app():
         st.write("") 
         st.write("") 
         
-        # ប៊ូតុង Logout
         st.markdown('<div class="logout-box">', unsafe_allow_html=True)
         if st.button("ចាកចេញពីប្រព័ន្ធ (Logout)", key="btn_logout", use_container_width=True):
             st.session_state.logged_in = False
@@ -251,18 +199,14 @@ def run_subtitle_app():
     # ផ្ទាំងកណ្តាល (Main Workflow Logic)
     # ==========================================
     
-    # ------------------------------------------
-    # លក្ខខណ្ឌទី ១៖ ផ្ទាំង "🎙️ បកប្រែសំឡេងទៅជាអក្សរ"
-    # ------------------------------------------
     if st.session_state.current_tab == "translate":
-        # ផ្លាស់ប្តូរចំណងជើងជាភាសាខ្មែរសុទ្ធសាធ និងលុបអក្សរអង់គ្លេសចោលទាំងស្រុង
         st.markdown('<div class="main-title">ប្រព័ន្ធបកប្រែពីសំឡេងទៅជាអក្សរ</div>', unsafe_allow_html=True)
         st.markdown('<div class="sub-title">បម្លែងរាល់ឯកសារសំឡេងទៅជាអក្សរខ្មែរដោយស្វ័យប្រវត្តិជាមួយ AI</div>', unsafe_allow_html=True)
 
         # --- ផ្នែកទី ១៖ បញ្ចូលឯកសារ ---
         st.markdown("<h4 style='color: #F8FAFC;'>📂 ជំហានទី ១៖ បញ្ចូលឯកសារ</h4>", unsafe_allow_html=True)
         
-        # ប្រអប់អាប់ឡូតដែលមានទំហំជាចតុកោណកែងធំ
+        # ប្រើប្រអប់ Upload ស៊ីនរបស់ Streamlit សុទ្ធសាធ លែងមានកូដបង្ខំអក្សរទៀតហើយ
         uploaded_file = st.file_uploader(
             "សូមទាញឯកសារទម្លាក់ទីនេះ (គាំទ្រ៖ MP3, WAV, M4A, SRT)", 
             type=['mp3', 'wav', 'm4a', 'srt'],
@@ -273,14 +217,12 @@ def run_subtitle_app():
         if uploaded_file:
             file_type = uploaded_file.name.split('.')[-1].lower()
             
-            # ប៊ូតុងលុបចោលពណ៌ក្រហម (🗑️ លុបចោល)
             col_success, col_delete = st.columns([5, 1])
             with col_success:
                 st.success(f"✅ ឯកសារទទួលបានជោគជ័យ៖ {uploaded_file.name}")
             with col_delete:
                 st.markdown('<div class="delete-box">', unsafe_allow_html=True)
                 if st.button("🗑️ លុបចោល", use_container_width=True):
-                    # លុបឯកសារចោល និង Reset ប្រព័ន្ធឡើងវិញ
                     st.session_state.my_uploader_key = None
                     st.session_state.processing_done = False
                     st.rerun()
@@ -333,7 +275,7 @@ def run_subtitle_app():
                 st.session_state.processing_done = True
         st.markdown('</div>', unsafe_allow_html=True)
                 
-        # --- ផ្នែកទី ៤៖ បង្ហាញលទ្ធផល និងទាញយក ---
+        # --- ផ្នែកទី ៤៖ បង្ហាញលទ្ធផល ---
         if st.session_state.processing_done and uploaded_file:
             st.divider()
             st.markdown("<h4 style='color: #F8FAFC;'>📄 លទ្ធផលទទួលបានពី AI (គំរូ)</h4>", unsafe_allow_html=True)
