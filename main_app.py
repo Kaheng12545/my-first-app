@@ -1,258 +1,135 @@
 import streamlit as st
+import tempfile
+import os
 import time
+from openai import OpenAI
 
 def run_subtitle_app():
-    # --- 🎨 កូដ CSS ថ្មី៖ អក្សរចំកណ្តាល, ដក Emoji, និងដោះស្រាយបញ្ហាប៊ូតុងបាត់ ---
+    # --- 🎨 តុបតែង UI ឱ្យស្អាត (លែងមានបញ្ហារញ៉េរញ៉ៃ) ---
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro:wght@300;400;500;700&display=swap');
-    
     html, body, [class*="css"], [class*="st-"], p, span, div, label, li, button, input, select, textarea {
         font-family: 'Kantumruy Pro', sans-serif !important;
     }
-    
     .main-title {
         text-align: center;
-        font-family: 'Khmer OS Muol Light', sans-serif !important;
         color: #1E3A8A;
-        font-size: 32px;
-        margin-top: 10px;
-        margin-bottom: 30px;
-    }
-
-    /* ========================================================================= */
-    /* 🌟 ១. ប្រអប់បង្ហាញឈ្មោះហ្វាលពណ៌ខ្មៅ (អក្សរចំកណ្តាល ១០០%) */
-    /* ========================================================================= */
-    .filename-box {
-        background-color: #111827 !important;
-        border: 2px dashed #334155 !important; 
-        border-radius: 16px !important; 
-        height: 120px !important; 
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important; /* ⬅️ ដាក់អក្សរចំកណ្តាល (ឆ្វេង-ស្តាំ) */
-        text-align: center !important;
-        padding: 0 20px !important;
-        font-family: 'Kantumruy Pro', monospace !important;
-        font-size: 20px !important; 
-        overflow: hidden !important;
-        white-space: nowrap !important;
-        text-overflow: ellipsis !important;
-        box-shadow: inset 0 4px 10px rgba(0,0,0,0.3) !important;
-        margin-top: 2px !important;
-    }
-
-    /* ========================================================================= */
-    /* 🌟 ២. កម្ទេចទម្រង់ Uploader ចាស់ចោល */
-    /* ========================================================================= */
-    [data-testid="stFileUploader"] {
-        margin-bottom: 0 !important;
-    }
-    [data-testid="stFileUploaderDropzone"] {
-        border: none !important;
-        background-color: transparent !important;
-        padding: 0 !important;
-        min-height: 120px !important; 
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-    /* លាក់អក្សររញ៉េរញ៉ៃរបស់ Streamlit */
-    [data-testid="stFileUploaderDropzone"] > div > div, 
-    [data-testid="stFileUploaderDropzone"] small {
-        display: none !important; 
-    }
-
-    /* ========================================================================= */
-    /* 🌟 ៣. ប៊ូតុង "Add File" នៅខាងស្តាំ (មុនពេល Upload) */
-    /* ========================================================================= */
-    [data-testid="stFileUploaderDropzone"] > button {
-        background-color: #3B82F6 !important;
-        border: none !important;
-        border-radius: 16px !important;
-        height: 120px !important; 
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        cursor: pointer !important;
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
-        transition: all 0.3s ease !important;
-        
-        color: transparent !important; 
-        font-size: 0px !important; 
-        position: relative !important;
-    }
-    [data-testid="stFileUploaderDropzone"] > button:hover {
-        background-color: #2563EB !important;
-        transform: translateY(-3px) !important;
-        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5) !important;
-    }
-    
-    [data-testid="stFileUploaderDropzone"] > button::after {
-        content: "Add File" !important; /* ⬅️ ដក Emoji ចេញ ដាក់អក្សរអង់គ្លេស */
-        font-family: 'Kantumruy Pro', sans-serif !important;
-        font-size: 24px !important; 
-        font-weight: bold !important;
-        color: white !important;
-        position: absolute !important;
-        top: 0; left: 0; right: 0; bottom: 0;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important; /* ⬅️ អក្សរចំកណ្តាលប៊ូតុង */
-    }
-
-    /* ========================================================================= */
-    /* 🌟 ៤. ប៊ូតុង "Remove File" (ក្រោយពេល Upload រួច - លែងចេញប្រអប់ទទេទៀតហើយ!) */
-    /* ========================================================================= */
-    [data-testid="stFileUploaderFileData"] {
-        position: relative !important;
-        width: 100% !important;
-        height: 120px !important;
-        background-color: #EF4444 !important; /* ប្តូរទៅពណ៌ក្រហម (សញ្ញាលុប) */
-        border-radius: 16px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4) !important;
-        transition: all 0.3s ease !important;
-    }
-    [data-testid="stFileUploaderFileData"]:hover {
-        background-color: #DC2626 !important;
-        transform: translateY(-3px) !important;
-    }
-    
-    /* ដាក់អក្សរ Remove File លើប៊ូតុងក្រហម */
-    [data-testid="stFileUploaderFileData"]::after {
-        content: "Remove File" !important;
-        color: white !important;
-        font-size: 24px !important;
-        font-weight: bold !important;
-        font-family: 'Kantumruy Pro', sans-serif !important;
-        position: absolute !important;
-        pointer-events: none !important;
-    }
-
-    /* ពង្រីកប៊ូតុងខ្វែង (X) របស់ Streamlit ឱ្យលាតសន្ធឹងពេញប្រអប់ក្រហម តែធ្វើឱ្យថ្លាមើលមិនឃើញ */
-    [data-testid="stFileUploaderFileData"] button {
-        position: absolute !important;
-        width: 100% !important;
-        height: 100% !important;
-        top: 0 !important;
-        left: 0 !important;
-        opacity: 0 !important; /* លាក់រូប X */
-        cursor: pointer !important;
-        z-index: 10 !important;
-    }
-    
-    /* លាក់ឈ្មោះហ្វាលនៅក្នុងប្រអប់ Remove (ព្រោះវាចេញនៅប្រអប់ខ្មៅហើយ) */
-    [data-testid="stFileUploaderFileData"] div[data-testid="stMarkdownContainer"] {
-        display: none !important;
+        font-family: 'Khmer OS Muol Light', sans-serif !important;
+        font-size: 30px;
+        margin-bottom: 20px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-    # --- ចំណងជើងកម្មវិធី ---
-    st.markdown('<div class="main-title">🎙️ កម្មវិធីបកប្រែសំឡេងទៅជាអក្សរ</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-title">🎙️ កម្មវិធីបម្លែងសំឡេងទៅជា Subtitle ខ្មែរ (SRT) ពិតប្រាកដ</div>', unsafe_allow_html=True)
 
     # ==========================================
-    # 📂 ជំហានទី ១៖ ប្រអប់បញ្ចូលឯកសារ (រចនាថ្មីខ្នាតធំ)
+    # 🔑 ជំហានទី ១៖ ដាក់ API Key (ខានមិនបាន)
     # ==========================================
-    st.markdown("### 📂 ជំហានទី ១៖ បញ្ចូលឯកសាររបស់អ្នក")
+    st.markdown("### 🔑 ជំហានទី ១៖ បញ្ចូល OpenAI API Key")
+    api_key = st.text_input("បញ្ចូល API Key របស់អ្នកទីនេះ (ចាប់ផ្តើមដោយ sk-...)", type="password")
     
-    col_box, col_btn = st.columns([2.5, 1.5])
+    if not api_key:
+        st.warning("⚠️ ប្រព័ន្ធត្រូវការ API Key ដើម្បីបញ្ជា AI ឱ្យធ្វើការស្តាប់ និងបកប្រែពិតប្រាកដ។")
 
-    # ប៊ូតុង Upload នៅខាងស្តាំ
-    with col_btn:
-        uploaded_file = st.file_uploader("", label_visibility="collapsed")
+    st.divider()
 
-    # ប្រអប់បង្ហាញឈ្មោះហ្វាលនៅខាងឆ្វេង
-    with col_box:
-        if uploaded_file:
-            file_name = uploaded_file.name
-            st.markdown(f'<div class="filename-box" style="color: #10B981; border-color: #10B981;">✅ {file_name}</div>', unsafe_allow_html=True)
-        else:
-            st.markdown('<div class="filename-box" style="color: #64748B;">មិនទាន់មានឯកសារទេ...</div>', unsafe_allow_html=True)
+    # ==========================================
+    # 📂 ជំហានទី ២៖ បញ្ចូលឯកសារសំឡេង
+    # ==========================================
+    st.markdown("### 📂 ជំហានទី ២៖ បញ្ចូលឯកសារសំឡេង (MP3, WAV, M4A)")
+    uploaded_file = st.file_uploader("អូសឯកសារទម្លាក់ទីនេះ", type=['mp3', 'wav', 'm4a', 'mp4'])
 
-    allowed_extensions = ['mp3', 'wav', 'm4a', 'flac', 'mp4', 'mkv', 'srt', 'vtt', 'txt']
     if uploaded_file:
-        file_ext = uploaded_file.name.split('.')[-1].lower()
-        if file_ext not in allowed_extensions:
-            st.error("❌ សូមអភ័យទោស! ប្រព័ន្ធទទួលតែឯកសារសំឡេង វីដេអូ ឬអត្ថបទ SRT/TXT ប៉ុណ្ណោះ។")
-            uploaded_file = None 
-
-    st.write("") 
-    st.divider()
-
-    # ==========================================
-    # ⚙️ ជំហានទី ២៖ ការកំណត់ AI និង ភាសា
-    # ==========================================
-    st.markdown("### ⚙️ ជំហានទី ២៖ ជ្រើសរើស AI និងភាសាដែលចង់បកប្រែ")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.markdown("**🤖 ម៉ូដែលស្តាប់សំឡេង (Speech-to-Text):**")
-        st.selectbox("ម៉ូដែលស្តាប់", ["🧠 Whisper-Large-v3 (OpenAI)", "🧠 Whisper-1 (OpenAI)", "⚡ Deepgram Nova-2", "🚫 មិនត្រូវការ"], label_visibility="collapsed")
-        
-        st.markdown("**🌍 ភាសាដើមនៃឯកសារ:**")
-        st.selectbox("ភាសាដើម", ["🕵️ Auto-Detect", "🇰🇭 ខ្មែរ", "🇬🇧 អង់គ្លេស", "🇨🇳 ចិន"], label_visibility="collapsed")
-
-    with col2:
-        st.markdown("**📝 ម៉ូដែលបកប្រែ (Translator):**")
-        st.selectbox("ម៉ូដែលបកប្រែ", ["✨ GPT-4o (OpenAI)", "✨ Gemini 1.5 Pro (Google)", "✨ Claude 3.5 Sonnet (Anthropic)"], label_visibility="collapsed")
-
-        st.markdown("**🎯 ភាសាគោលដៅ:**")
-        st.selectbox("ភាសាគោលដៅ", ["🇰🇭 ខ្មែរ", "🇬🇧 អង់គ្លេស", "🇫🇷 បារាំង", "🇨🇳 ចិន", "🇯🇵 ជប៉ុន", "🇰🇷 កូរ៉េ", "🇹🇭 ថៃ"], label_visibility="collapsed")
+        st.success(f"✅ ឯកសារបានត្រៀមរួចរាល់៖ {uploaded_file.name}")
 
     st.divider()
 
     # ==========================================
-    # 🚀 ជំហានទី ៣៖ ចាប់ផ្តើមប្រតិបត្តិការ
+    # 🚀 ជំហានទី ៣៖ ដំណើរការម៉ាស៊ីន AI ពិតប្រាកដ
     # ==========================================
-    st.markdown("### 🚀 ជំហានទី ៣៖ ចាប់ផ្តើមបម្លែង (Generate)")
-
-    if st.button("⚡ ចាប់ផ្តើមបកប្រែឥឡូវនេះ", type="primary", use_container_width=True):
-        if not uploaded_file:
-            st.warning("⚠️ សូមបញ្ចូលឯកសារនៅ [ជំហានទី ១] សិន!")
+    st.markdown("### 🚀 ជំហានទី ៣៖ ចាប់ផ្តើមបម្លែងជាអក្សរខ្មែរ")
+    
+    if st.button("⚡ ចាប់ផ្តើមដំណើរការឥឡូវនេះ", type="primary", use_container_width=True):
+        if not api_key:
+            st.error("❌ សូមបញ្ចូល API Key នៅជំហានទី ១ សិន!")
+        elif not uploaded_file:
+            st.error("❌ សូមបញ្ចូលឯកសារសំឡេង នៅជំហានទី ២ សិន!")
         else:
-            progress_bar = st.progress(0)
-            status_text = st.empty()
+            try:
+                # ១. រៀបចំប្រព័ន្ធ
+                client = OpenAI(api_key=api_key)
+                progress_bar = st.progress(0)
+                status_text = st.empty()
 
-            for i in range(101):
-                if i < 30:
-                    time.sleep(0.02)
-                    status_text.markdown("🔄 កំពុងទាញយកសំឡេង...")
-                elif i < 60:
-                    time.sleep(0.02)
-                    status_text.markdown("🤖 AI កំពុងស្តាប់...")
-                elif i < 90:
-                    time.sleep(0.02)
-                    status_text.markdown("✨ កំពុងបកប្រែ...")
-                else:
-                    time.sleep(0.02)
-                    status_text.markdown("✅ កំពុងរៀបចំឯកសារ...")
-                progress_bar.progress(i)
+                # ២. រក្សាទុកហ្វាលជាបណ្តោះអាសន្ន ដើម្បីឱ្យ AI អាចអានបាន
+                status_text.info("🔄 កំពុងរៀបចំឯកសារបញ្ជូនទៅកាន់ AI...")
+                progress_bar.progress(10)
+                
+                with tempfile.NamedTemporaryFile(delete=False, suffix=f".{uploaded_file.name.split('.')[-1]}") as tmp_file:
+                    tmp_file.write(uploaded_file.getvalue())
+                    tmp_file_path = tmp_file.name
 
-            status_text.success("🎉 ដំណើរការជោគជ័យ ១០០%!")
-            st.session_state.processing_done = True
+                # ៣. ប្រើ Whisper AI ដើម្បីស្តាប់ និងបញ្ចេញជាហ្វាល SRT ដើម (ភាសាអង់គ្លេស ឬដើម)
+                status_text.info("🤖 AI កំពុងស្តាប់សំឡេង និងទាញយក Timestamps... (អាចចំណាយពេលបន្តិច)")
+                progress_bar.progress(40)
+                
+                with open(tmp_file_path, "rb") as audio_file:
+                    # បញ្ជាឱ្យ Whisper បញ្ចេញលទ្ធផលជា SRT ស្តង់ដារ
+                    transcript_srt = client.audio.transcriptions.create(
+                        model="whisper-1", 
+                        file=audio_file, 
+                        response_format="srt"
+                    )
+                
+                # ៤. ប្រើ GPT-4o ដើម្បីបកប្រែអត្ថបទក្នុង SRT ទៅជាភាសាខ្មែរ ដោយរក្សា Timestamp ដដែល
+                status_text.info("✨ កំពុងបកប្រែអត្ថបទទៅជាភាសាខ្មែរយ៉ាងរលូន...")
+                progress_bar.progress(70)
+
+                translation_prompt = """
+                អ្នកគឺជាអ្នកបកប្រែ Subtitle ភាពយន្តដ៏ចំណាន។ 
+                សូមបកប្រែអត្ថបទក្នុងឯកសារ SRT ខាងក្រោមនេះទៅជា **ភាសាខ្មែរ** ឱ្យបានត្រឹមត្រូវ និងពីរោះរលូន។
+                លក្ខខណ្ឌដ៏តឹងរ៉ឹង៖ ហាមប៉ះពាល់ ឬផ្លាស់ប្តូរលេខលំដាប់ និង Timestamps (ឧទាហរណ៍៖ 00:00:01,000 --> 00:00:05,000) ជាដាច់ខាត។ បកប្រែតែអត្ថបទប៉ុណ្ណោះ។
+                """
+
+                response = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": translation_prompt},
+                        {"role": "user", "content": transcript_srt}
+                    ],
+                    temperature=0.3 # កំណត់ឱ្យវាយកចិត្តទុកដាក់ខ្ពស់លើភាពត្រឹមត្រូវ
+                )
+                
+                khmer_srt_content = response.choices[0].message.content
+
+                # ៥. បញ្ចប់ការងារ និងលុបហ្វាលបណ្តោះអាសន្នចោល
+                os.remove(tmp_file_path)
+                progress_bar.progress(100)
+                status_text.success("🎉 ដំណើរការចប់សព្វគ្រប់ ១០០%!")
+                
+                # រក្សាទុកលទ្ធផលក្នុង Session State
+                st.session_state.final_srt = khmer_srt_content
+                st.session_state.processing_done = True
+
+            except Exception as e:
+                st.error(f"❌ មានបញ្ហាក្នុងការដំណើរការ៖ {e}")
 
     # ==========================================
-    # 📄 បង្ហាញលទ្ធផល (Output)
+    # 📥 បង្ហាញលទ្ធផល និងទាញយកហ្វាល .SRT
     # ==========================================
-    if getattr(st.session_state, 'processing_done', False) and uploaded_file:
-        st.markdown("### 📄 លទ្ធផលទទួលបាន")
+    if getattr(st.session_state, 'processing_done', False):
+        st.markdown("### 📄 លទ្ធផល Subtitle (ភាសាខ្មែរ)")
+        st.text_area("មើលអត្ថបទគំរូជាមុន៖", value=st.session_state.final_srt, height=250)
         
-        sample_result = (
-            "1\n00:00:01,000 --> 00:00:05,500\nសួស្តីអ្នកទាំងអស់គ្នា!\n\n"
-            "2\n00:00:06,000 --> 00:00:10,500\nថ្ងៃនេះយើងនឹងជជែកពី AI។"
+        st.download_button(
+            label="📥 ទាញយកឯកសារ .SRT ទៅប្រើប្រាស់",
+            data=st.session_state.final_srt,
+            file_name=f"Khmer_Subtitle_{uploaded_file.name.split('.')[0]}.srt",
+            mime="text/plain",
+            use_container_width=True
         )
-        st.text_area("អត្ថបទឯកសារ (Subtitle)", value=sample_result, height=150)
-        st.download_button("📥 ទាញយក .SRT", data=sample_result, file_name="Translated.srt")
 
 if __name__ == "__main__":
-    if 'logged_in' not in st.session_state:
-        st.session_state.logged_in = True
-    if st.session_state.logged_in:
-        run_subtitle_app()
+    run_subtitle_app()
