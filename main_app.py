@@ -2,7 +2,7 @@ import streamlit as st
 import time
 
 def run_subtitle_app():
-    # --- 🎨 កូដ CSS ពិសេស៖ បង្ខំកែសម្រួលប្រអប់ Uploader ឱ្យទៅជាចតុកោណកែងធំ និងចំកណ្តាលបេះបិទ (គ្រប់កំណែ Streamlit) ---
+    # --- 🎨 កូដ CSS ជំនាន់ថ្មី៖ ពង្រីកប្រអប់ឱ្យទៅជាចតុកោណកែងធំតាមធម្មជាតិ មិនឱ្យជាន់អក្សរគ្នា ---
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro:wght@300;400;500;700&display=swap');
@@ -54,103 +54,42 @@ def run_subtitle_app():
     }
 
     /* ---------------------------------------------------------------- */
-    /* 🚀 ផ្នែកកូដបង្ខំផ្លុំប្រអប់ Uploader ឱ្យទៅជាចតុកោណកែងធំ និងកណ្តាលបេះបិទ (Core CSS Override) */
+    /* 🚀 កូដពង្រីកប្រអប់ Uploader ឱ្យទៅជាចតុកោណកែងធំ និងកណ្តាល (សថ្លាស្អាត) */
     /* ---------------------------------------------------------------- */
     
-    /* ១. លុបផ្ទៃខាងក្រោយខ្មៅ និងគែមចាស់ចោលទាំងអស់ */
-    .stFileUploader, 
-    div[data-testid="stFileUploader"], 
-    section[data-testid="stFileUploader"] {
+    .stFileUploader {
         background-color: transparent !important;
-        border: none !important;
-        padding: 0px !important;
-        display: block !important;
-        width: 100% !important;
     }
 
-    /* ២. បង្ខំឱ្យប្រអប់ Dropzone ឡើងរាងជាចតុកោណកែងធំ (កម្ពស់ 280px) និងពណ៌កញ្ចក់សថ្លា */
-    .stFileUploader > div,
-    div[data-testid="stFileUploaderDropzone"],
-    div[data-testid="stFileDropzone"],
-    .uploadedFile {
+    /* កែសម្រួលប្រអប់ Dropzone ឱ្យរីកធំតាមរយៈ Padding (ធានាមិនឱ្យគាំងប្លង់) */
+    div[data-testid="stFileUploaderDropzone"] {
         background-color: rgba(221, 227, 240, 0.95) !important; /* ពណ៌កញ្ចក់សថ្លាស្អាត */
         background: rgba(221, 227, 240, 0.95) !important;
-        border: 2px dashed #6366F1 !important; /* គែមឆ្នូតៗពណ៌ស្វាយ */
+        border: 2px dashed #6366F1 !important; /* គែមឆ្នូតៗ */
         border-radius: 16px !important;
-        height: 280px !important; /* បង្ខំកម្ពស់រាងចតុកោណកែងធំ */
-        min-height: 280px !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important; /* តម្រឹមចំកណ្តាលឆ្វេងស្តាំ */
-        justify-content: center !important; /* សម្រួលឱ្យចំកណ្តាលលើក្រោម */
+        padding: 60px 20px !important; /* ពង្រីកទទឹង និងកម្ពស់ឱ្យទៅជាចតុកោណកែងធំតាមធម្មជាតិ */
+        min-height: 250px !important;
         text-align: center !important;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
-        padding: 30px !important;
-        transition: all 0.3s ease-in-out !important;
-    }
-
-    /* ពេលដាក់ Mouse ពីលើ */
-    .stFileUploader > div:hover,
-    div[data-testid="stFileUploaderDropzone"]:hover {
-        background-color: rgba(255, 255, 255, 0.98) !important;
-        background: rgba(255, 255, 255, 0.98) !important;
-        border-color: #3B82F6 !important;
-        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.25) !important;
-    }
-
-    /* ៣. រៀបចំប្លង់ និងរចនាសម្ព័ន្ធខាងក្នុងឱ្យរត់ចំកណ្តាល និងបាត់ឆ្នូតខ្មៅចាស់ */
-    div[data-testid="stFileUploaderDropzone"] > div,
-    div[data-testid="stFileUploaderDropzone"] > section,
-    .stFileUploader > div > div {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 15px !important;
-        width: 100% !important;
-        height: 100% !important;
-        background-color: transparent !important;
-        background: transparent !important;
-        border: none !important;
-        padding: 0px !important;
     }
 
-    /* ៤. បង្ខំប៊ូតុង "Browse Files" (Upload) ឱ្យធំ និងចំកណ្តាលចតុកោណកែង */
-    div[data-testid="stFileUploaderDropzone"] button,
-    .stFileUploader button {
-        background: linear-gradient(135deg, #6366F1 0%, #3B82F6 100%) !important;
-        color: #FFFFFF !important;
-        border: none !important;
-        padding: 12px 32px !important; /* ប៊ូតុងធំស្អាត */
-        border-radius: 8px !important;
-        font-weight: bold !important;
-        font-size: 15px !important;
-        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
-        margin: 0 auto !important; /* បង្ខំចំកណ្តាលឆ្វេងស្តាំ */
-        display: inline-block !important;
+    /* ពេលដាក់ Mouse ពីលើ */
+    div[data-testid="stFileUploaderDropzone"]:hover {
+        background-color: rgba(255, 255, 255, 0.98) !important;
+        background: rgba(255, 255, 255, 0.98) !important;
+        border-color: #3B82F6 !important;
     }
 
-    /* ៥. កែច្នៃរូបតំណាងសញ្ញា Upload (SVG Icon) ឱ្យធំស្អាតចំកណ្តាល */
-    div[data-testid="stFileUploaderDropzone"] svg,
-    .stFileUploader svg {
-        fill: #6366F1 !important;
-        width: 50px !important;
-        height: 50px !important;
-        margin: 0 auto 10px auto !important;
-        display: block !important;
-    }
-
-    /* ៦. បង្ខំអក្សរណែនាំក្នុងប្រអប់ឱ្យពណ៌ក្រម៉ៅងាយមើលលើផ្ទៃសថ្លា */
+    /* កំណត់ពណ៌អក្សរណែនាំទាំងអស់ក្នុងប្រអប់ឱ្យពណ៌ក្រម៉ៅងាយមើលលើផ្ទៃសថ្លា */
     div[data-testid="stFileUploaderDropzone"] span,
-    div[data-testid="stFileUploaderDropzone"] small,
-    .stFileUploader span,
-    .stFileUploader small {
+    div[data-testid="stFileUploaderDropzone"] small {
         color: #1E293B !important; 
         font-weight: 500 !important;
         font-size: 14px !important;
-        text-align: center !important;
-        margin: 0 auto !important;
-        display: block !important;
     }
 
     /* ---------------------------------------------------------------- */
@@ -247,7 +186,7 @@ def run_subtitle_app():
         st.session_state.current_tab = "translate"
 
     # ==========================================
-    # របារចំហៀង (Sidebar) - លុបប្រអប់ "គណនីរបស់អ្នក" ចេញស្អាតដាច់ស្រឡះ
+    # របារចំហៀង (Sidebar)
     # ==========================================
     with st.sidebar:
         st.write("") 
@@ -290,14 +229,12 @@ def run_subtitle_app():
     # លក្ខខណ្ឌទី ១៖ ផ្ទាំង "🎙️ បកប្រែសំឡេងទៅជាអក្សរ"
     # ------------------------------------------
     if st.session_state.current_tab == "translate":
-        # ផ្លាស់ប្តូរចំណងជើងជាភាសាខ្មែរសុទ្ធសាធ និងលុបអក្សរអង់គ្លេសចោលទាំងស្រុង
         st.markdown('<div class="main-title">ប្រព័ន្ធបកប្រែពីសំឡេងទៅជាអក្សរ</div>', unsafe_allow_html=True)
         st.markdown('<div class="sub-title">បម្លែងរាល់ឯកសារសំឡេងទៅជាអក្សរខ្មែរដោយស្វ័យប្រវត្តិជាមួយ AI</div>', unsafe_allow_html=True)
 
         # --- ផ្នែកទី ១៖ បញ្ចូលឯកសារ ---
         st.markdown("<h4 style='color: #F8FAFC;'>📂 ជំហានទី ១៖ បញ្ចូលឯកសារ</h4>", unsafe_allow_html=True)
         
-        # ប្រអប់អាប់ឡូតដែលមានទំហំជាចតុកោណកែងធំ
         uploaded_file = st.file_uploader(
             "សូមទាញឯកសារទម្លាក់ទីនេះ (គាំទ្រ៖ MP3, WAV, M4A, SRT)", 
             type=['mp3', 'wav', 'm4a', 'srt'],
@@ -315,7 +252,6 @@ def run_subtitle_app():
             with col_delete:
                 st.markdown('<div class="delete-box">', unsafe_allow_html=True)
                 if st.button("🗑️ លុបចោល", use_container_width=True):
-                    # លុបឯកសារចោល និង Reset ប្រព័ន្ធឡើងវិញ
                     st.session_state.my_uploader_key = None
                     st.session_state.processing_done = False
                     st.rerun()
