@@ -2,7 +2,7 @@ import streamlit as st
 import time
 
 def run_subtitle_app():
-    # --- 🎨 ប្រើក្បួនផ្តាច់ព្រលឹង សម្លាប់អក្សរទាំងអស់ក្នុងប្រអប់ Uploader ---
+    # --- 🎨 កូដ CSS ទុកតែប៊ូតុងមួយគ្រាប់ ---
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro:wght@300;400;500;700&display=swap');
@@ -26,30 +26,21 @@ def run_subtitle_app():
     }
 
     /* ========================================================================= */
-    /* 💥 វគ្គកម្ទេចអក្សរ Upload & 200MB (យកតាមបញ្ជាបង ១០០%) 💥 */
+    /* 💥 កម្ចាត់អក្សរ Upload ចេញពីប៊ូតុង ទុកតែ Icon 💥 */
     /* ========================================================================= */
-
-    /* ១. លុបអក្សរ 200MB និងអក្សរពន្យល់ផ្សេងៗចោលឱ្យអស់ */
-    div[data-testid="stFileUploaderDropzone"] small,
-    div[data-testid="stFileUploaderDropzone"] div[data-testid="stMarkdownContainer"],
-    div[data-testid="stFileUploaderDropzone"] svg {
-        display: none !important;
-    }
-
-    /* ២. កម្ចាត់អក្សរ uploadupload ចេញពីប៊ូតុងដោយបោះវាចោលទៅក្រៅអេក្រង់ (-9999px) */
     div[data-testid="stFileUploaderDropzone"] button {
-        text-indent: -9999px !important; /* ក្បួនពិសេស៖ បោះអក្សរចោលមិនឱ្យឃើញមុខ */
-        overflow: hidden !important;     /* លាក់អ្វីដែលបោះចោល */
+        text-indent: -9999px !important; /* រុញអក្សរចោលទៅក្រៅអេក្រង់ (តាមគំនិតបង) */
+        overflow: hidden !important;     
         white-space: nowrap !important;
-        color: transparent !important;   /* ធ្វើឱ្យអក្សរថ្លា */
+        color: transparent !important;   /* ធ្វើឱ្យអក្សរថ្លា (តាមគំនិតបង) */
         
-        /* ទុកតែប៊ូតុង និងរូប Icon មួយគត់ */
+        /* ដាក់ Icon ប៊ូតុងពណ៌ខៀវ */
         background-color: #3B82F6 !important;
         background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>') !important;
         background-position: center !important;
         background-repeat: no-repeat !important;
         
-        width: 100% !important; /* ប៊ូតុងលាតពេញប្រអប់ */
+        width: 100% !important; 
         height: 60px !important;
         border: none !important;
         border-radius: 8px !important;
@@ -60,12 +51,19 @@ def run_subtitle_app():
         background-color: #2563EB !important;
     }
 
-    /* ៣. ធ្វើឱ្យប្រអប់ Dropzone តូចល្មម ឱបជាប់តែប៊ូតុង */
     div[data-testid="stFileUploaderDropzone"] {
         padding: 0 !important;
         min-height: 60px !important;
         border: 2px dashed #94A3B8 !important;
         background-color: transparent !important;
+    }
+    
+    /* ក្បួនបម្រុង (Backup) លាក់រាល់អក្សរតូចៗដែលរឹងក្បាល */
+    [data-testid="stFileUploader"] small {
+        display: none !important;
+        color: transparent !important;
+        position: absolute !important;
+        left: -9999px !important;
     }
     /* ========================================================================= */
     </style>
@@ -80,11 +78,19 @@ def run_subtitle_app():
     # ==========================================
     st.markdown("### 📂 ជំហានទី ១៖ បញ្ចូលឯកសាររបស់អ្នក (ចុចលើប៊ូតុងខាងក្រោម)")
     
-    # ហៅប្រអប់ Upload (ឥឡូវវានៅសល់តែប៊ូតុងមួយគត់)
-    uploaded_file = st.file_uploader("", type=['mp3', 'wav', 'm4a', 'flac', 'mp4', 'mkv', 'srt', 'vtt', 'txt'], label_visibility="collapsed")
+    # 🌟 អាថ៌កំបាំងនៅត្រង់នេះ៖ ខ្ញុំដកពាក្យ type=['mp3'...] ចេញ ដូច្នេះប្រព័ន្ធលែងលោតអក្សរ "200MB per file..." ទៀតហើយ! 🌟
+    uploaded_file = st.file_uploader("", label_visibility="collapsed")
 
+    # តែកំណត់លក្ខខណ្ឌចាប់ហ្វាលនៅទីនេះវិញ (ការពារការអាប់ឡូតខុស)
+    allowed_extensions = ['mp3', 'wav', 'm4a', 'flac', 'mp4', 'mkv', 'srt', 'vtt', 'txt']
+    
     if uploaded_file:
-        st.success(f"✅ ឯកសារទទួលបានជោគជ័យ៖ {uploaded_file.name}")
+        file_ext = uploaded_file.name.split('.')[-1].lower()
+        if file_ext not in allowed_extensions:
+            st.error("❌ សូមអភ័យទោស! ប្រព័ន្ធទទួលតែឯកសារសំឡេង វីដេអូ ឬអត្ថបទ SRT/TXT ប៉ុណ្ណោះ។")
+            uploaded_file = None # បដិសេធហ្វាលហ្នឹងចោល
+        else:
+            st.success(f"✅ ឯកសារទទួលបានជោគជ័យ៖ {uploaded_file.name}")
 
     st.divider()
 
@@ -97,28 +103,17 @@ def run_subtitle_app():
     
     with col1:
         st.markdown("**🤖 ម៉ូដែលស្តាប់សំឡេង (Speech-to-Text):**")
-        st.selectbox("ម៉ូដែលស្តាប់", [
-            "🧠 Whisper-Large-v3 (OpenAI)",
-            "🧠 Whisper-1 (OpenAI)",
-            "⚡ Deepgram Nova-2",
-            "🚫 មិនត្រូវការ"
-        ], label_visibility="collapsed")
+        st.selectbox("ម៉ូដែលស្តាប់", ["🧠 Whisper-Large-v3 (OpenAI)", "🧠 Whisper-1 (OpenAI)", "⚡ Deepgram Nova-2", "🚫 មិនត្រូវការ"], label_visibility="collapsed")
         
         st.markdown("**🌍 ភាសាដើមនៃឯកសារ:**")
         st.selectbox("ភាសាដើម", ["🕵️ Auto-Detect", "🇰🇭 ខ្មែរ", "🇬🇧 អង់គ្លេស", "🇨🇳 ចិន"], label_visibility="collapsed")
 
     with col2:
         st.markdown("**📝 ម៉ូដែលបកប្រែ (Translator):**")
-        st.selectbox("ម៉ូដែលបកប្រែ", [
-            "✨ GPT-4o (OpenAI)",
-            "✨ Gemini 1.5 Pro (Google)",
-            "✨ Claude 3.5 Sonnet (Anthropic)"
-        ], label_visibility="collapsed")
+        st.selectbox("ម៉ូដែលបកប្រែ", ["✨ GPT-4o (OpenAI)", "✨ Gemini 1.5 Pro (Google)", "✨ Claude 3.5 Sonnet (Anthropic)"], label_visibility="collapsed")
 
         st.markdown("**🎯 ភាសាគោលដៅ:**")
-        st.selectbox("ភាសាគោលដៅ", [
-            "🇰🇭 ខ្មែរ", "🇬🇧 អង់គ្លេស", "🇫🇷 បារាំង", "🇨🇳 ចិន", "🇯🇵 ជប៉ុន", "🇰🇷 កូរ៉េ", "🇹🇭 ថៃ"
-        ], label_visibility="collapsed")
+        st.selectbox("ភាសាគោលដៅ", ["🇰🇭 ខ្មែរ", "🇬🇧 អង់គ្លេស", "🇫🇷 បារាំង", "🇨🇳 ចិន", "🇯🇵 ជប៉ុន", "🇰🇷 កូរ៉េ", "🇹🇭 ថៃ"], label_visibility="collapsed")
 
     st.divider()
 
