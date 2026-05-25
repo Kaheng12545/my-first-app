@@ -2,7 +2,7 @@ import streamlit as st
 import time
 
 def run_subtitle_app():
-    # --- 🎨 ការកំណត់ Font និងពណ៌តិចតួច (មិនប៉ះពាល់ប្រអប់ Upload ដើមរបស់ប្រព័ន្ធឡើយ) ---
+    # --- 🎨 ការកំណត់ Font និងពណ៌ ---
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro:wght@300;400;500;700&display=swap');
@@ -24,6 +24,41 @@ def run_subtitle_app():
         font-size: 16px;
         margin-bottom: 30px;
     }
+
+    /* ----------------------------------------------------------------------- */
+    /* 🚀 ក្បួនពិសេសតាមការនឹកឃើញរបស់បង៖ លុបអក្សរចេញពីប៊ូតុង ទុកតែ Icon! */
+    /* ----------------------------------------------------------------------- */
+    
+    /* ១. ធ្វើឱ្យអក្សរនៅលើប៊ូតុង "Browse files" ទៅជាទំហំ 0 និងគ្មានពណ៌ (មើលលែងឃើញ) */
+    div[data-testid="stFileUploaderDropzone"] button {
+        font-size: 0px !important;       /* បង្រួមអក្សរឱ្យបាត់ឈឹង */
+        color: transparent !important;   /* ធ្វើឱ្យអក្សរថ្លាមើលមិនឃើញ */
+        
+        /* តុបតែងប៊ូតុងឱ្យស្អាត និងដាក់រូប Icon (Upload) ជំនួសអក្សរវិញ */
+        background-color: #3B82F6 !important; /* ពណ៌ខៀវ */
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>') !important; 
+        background-repeat: no-repeat !important;
+        background-position: center !important;
+        
+        border: none !important;
+        border-radius: 10px !important;
+        width: 80px !important;   /* កំណត់ប្រវែងប៊ូតុងឱ្យខ្លីល្មមសមនឹង Icon */
+        height: 45px !important;
+        margin: 10px auto !important; /* តម្រឹមឱ្យនៅចំកណ្តាល */
+        cursor: pointer !important;
+        transition: 0.3s !important;
+    }
+
+    /* ពេលដាក់ Mouse ពីលើប៊ូតុងដូរពណ៌បន្តិច */
+    div[data-testid="stFileUploaderDropzone"] button:hover {
+        background-color: #2563EB !important;
+        transform: scale(1.05) !important;
+    }
+
+    /* ២. លាក់រាល់ Tag អក្សរផ្សេងៗដែល Streamlit ឬ Translate ព្យាយាមបង្កើតនៅលើប៊ូតុង */
+    div[data-testid="stFileUploaderDropzone"] button * {
+        display: none !important;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -36,7 +71,7 @@ def run_subtitle_app():
     # ==========================================
     st.markdown("### 📂 ជំហានទី ១៖ បញ្ចូលឯកសាររបស់អ្នក")
     
-    # ប្រអប់ Upload ដើមរបស់ Streamlit (ធានាមិនជាន់អក្សរពេលបើក Google Translate)
+    # ប្រអប់ Upload
     uploaded_file = st.file_uploader(
         "សូមទាញឯកសារទម្លាក់ទីនេះ (គាំទ្រគ្រប់ទម្រង់រួមមាន៖ MP3, WAV, M4A, MP4, SRT, VTT...)", 
         type=['mp3', 'wav', 'm4a', 'flac', 'mp4', 'mkv', 'srt', 'vtt', 'txt']
@@ -77,13 +112,11 @@ def run_subtitle_app():
         ], label_visibility="collapsed")
 
         st.markdown("**🎯 ភាសាដែលចង់បកប្រែទៅជា (Target Language):**")
-        # បញ្ជីភាសាជាង ៦០+ 
         target_languages = [
             "🇰🇭 ខ្មែរ (Khmer - រលូន និងពីរោះបំផុត)", "🇬🇧 អង់គ្លេស (English)", "🇫🇷 បារាំង (French)", 
             "🇨🇳 ចិន (Chinese Simplified)", "🇯🇵 ជប៉ុន (Japanese)", "🇰🇷 កូរ៉េ (Korean)", 
             "🇹🇭 ថៃ (Thai)", "🇻🇳 វៀតណាម (Vietnamese)", "🇪🇸 អេស្ប៉ាញ (Spanish)", 
-            "🇩🇪 អាល្លឺម៉ង់ (German)", "🇷🇺 រុស្ស៊ី (Russian)", "🇮🇳 ហិណ្ឌូ (Hindi)", 
-            "និង ៥០ ភាសាផ្សេងៗទៀត..."
+            "🇩🇪 អាល្លឺម៉ង់ (German)", "🇷🇺 រុស្ស៊ី (Russian)", "🇮🇳 ហិណ្ឌូ (Hindi)"
         ]
         st.selectbox("ភាសាគោលដៅ", target_languages, label_visibility="collapsed")
 
@@ -94,17 +127,14 @@ def run_subtitle_app():
     # ==========================================
     st.markdown("### 🚀 ជំហានទី ៣៖ ចាប់ផ្តើមបម្លែង (Generate)")
 
-    # ប៊ូតុង Generate
     if st.button("⚡ ចាប់ផ្តើមបកប្រែឥឡូវនេះ (Generate)", type="primary", use_container_width=True):
         if not uploaded_file:
             st.warning("⚠️ សូមបញ្ចូលឯកសារនៅ [ជំហានទី ១] សិនមុននឹងបន្ត!")
         else:
-            # --- កូដ Progress Bar រលូនដូចទឹកហូរ ---
             progress_bar = st.progress(0)
             status_text = st.empty()
 
             for i in range(101):
-                # ធ្វើឱ្យវាដើររលូន ប្រើល្បឿនខុសៗគ្នាតាមដំណាក់កាល
                 if i < 30:
                     time.sleep(0.03)
                     status_text.markdown("🔄 កំពុងទាញយកសំឡេង និងវិភាគរលកសំឡេង...")
@@ -130,7 +160,6 @@ def run_subtitle_app():
         st.markdown("### 📄 លទ្ធផលទទួលបាន")
         st.info("💡 ប្រយោគត្រូវបានរៀបចំយ៉ាងប្រណិត និងពីរោះដោយ AI:")
         
-        # គំរូអត្ថបទដែលចេញមកពីរោះៗ
         sample_result = (
             "1\n00:00:01,000 --> 00:00:05,500\n"
             "សួស្តីអ្នកទាំងអស់គ្នា! សូមស្វាគមន៍មកកាន់ការទស្សនាវីដេអូរបស់យើងនៅថ្ងៃនេះ។\n\n"
@@ -142,7 +171,6 @@ def run_subtitle_app():
         
         st.text_area("អត្ថបទឯកសារចំណងជើង (Subtitle)", value=sample_result, height=200)
 
-        # កន្លែងទាញយកឯកសារ
         col_dl1, col_dl2 = st.columns(2)
         with col_dl1:
             st.download_button(
@@ -155,13 +183,12 @@ def run_subtitle_app():
         with col_dl2:
             st.download_button(
                 label="📥 ទាញយកជាហ្វាល .TXT",
-                data=sample_result.replace("-->", "ដល់").replace("\n\n", "\n"), # កែសម្រួលតិចតួចជាឧទាហរណ៍
+                data=sample_result.replace("-->", "ដល់").replace("\n\n", "\n"), 
                 file_name=f"Translated_{uploaded_file.name.split('.')[0]}.txt",
                 mime="text/plain",
                 use_container_width=True
             )
 
-# ហៅមកប្រើប្រាស់
 if __name__ == "__main__":
     if 'logged_in' not in st.session_state:
         st.session_state.logged_in = True
