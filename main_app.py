@@ -2,7 +2,7 @@ import streamlit as st
 import time
 
 def run_subtitle_app():
-    # --- 🎨 កូដ CSS ថ្មី៖ រចនាប្រអប់ឈ្មោះហ្វាល និងប៊ូតុងដាច់ដោយឡែកពីគ្នា ---
+    # --- 🎨 កូដ CSS ថ្មី៖ ពង្រីកប្រអប់ និងប៊ូតុងឱ្យធំយក្ស ---
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro:wght@300;400;500;700&display=swap');
@@ -21,23 +21,24 @@ def run_subtitle_app():
     }
 
     /* ========================================================================= */
-    /* 🌟 ១. រចនាប្រអប់ពណ៌ខ្មៅសម្រាប់បង្ហាញឈ្មោះហ្វាលនៅខាងឆ្វេង */
+    /* 🌟 ១. រចនាប្រអប់ពណ៌ខ្មៅ (ពង្រីកកម្ពស់ 120px និងអក្សរធំជាងមុន) */
     /* ========================================================================= */
     .filename-box {
         background-color: #111827 !important; /* ផ្ទៃពណ៌ខ្មៅ */
-        border: 1px solid #334155 !important;
-        border-radius: 8px !important;
-        height: 45px !important;
+        border: 2px dashed #334155 !important; /* ដាក់បន្ទាត់ដាច់ៗឱ្យដូចប្រអប់ Upload */
+        border-radius: 16px !important; /* គែមកោងស្អាត */
+        height: 120px !important; /* ⬅️ កម្ពស់ធំយក្ស */
         display: flex !important;
         align-items: center !important;
-        padding: 0 15px !important;
-        font-family: monospace !important;
-        font-size: 14px !important;
+        justify-content: center !important; /* រុញអក្សរចំកណ្តាល */
+        padding: 0 20px !important;
+        font-family: 'Kantumruy Pro', monospace !important;
+        font-size: 20px !important; /* ⬅️ អក្សរធំជាងមុន */
         overflow: hidden !important;
         white-space: nowrap !important;
         text-overflow: ellipsis !important;
+        box-shadow: inset 0 4px 10px rgba(0,0,0,0.3) !important;
         margin-top: 2px !important;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.2) !important;
     }
 
     /* ========================================================================= */
@@ -50,44 +51,46 @@ def run_subtitle_app():
         border: none !important;
         background-color: transparent !important;
         padding: 0 !important;
-        min-height: 45px !important;
+        min-height: 120px !important; /* ⬅️ ត្រូវគ្នានឹងប្រអប់ខ្មៅ */
     }
-    /* លាក់អក្សរអង់គ្លេស និង Icon ចាស់ៗទាំងអស់ */
     [data-testid="stFileUploaderDropzone"] > div > div, 
     [data-testid="stFileUploaderDropzone"] small {
         display: none !important;
     }
 
     /* ========================================================================= */
-    /* 🌟 ៣. រចនាប៊ូតុង "បញ្ចូលហ្វាល" នៅខាងស្តាំ (ការពារការបកប្រែជាន់គ្នា ១០០%) */
+    /* 🌟 ៣. រចនាប៊ូតុង "បញ្ចូលហ្វាល" នៅខាងស្តាំឱ្យធំៗ */
     /* ========================================================================= */
     [data-testid="stFileUploaderDropzone"] button {
         background-color: #3B82F6 !important;
         border: none !important;
-        border-radius: 8px !important;
-        height: 45px !important;
+        border-radius: 16px !important;
+        height: 120px !important; /* ⬅️ ប៊ូតុងកម្ពស់ធំយក្ស */
         width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
         cursor: pointer !important;
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
+        transition: all 0.3s ease !important;
         
-        /* ក្បួនសម្លាប់អក្សរដើមមិនឱ្យ Google Translate ឃើញ */
         color: transparent !important; 
         font-size: 0px !important; 
         overflow: hidden !important;
     }
     [data-testid="stFileUploaderDropzone"] button:hover {
         background-color: #2563EB !important;
+        transform: translateY(-3px) !important; /* លោតឡើងលើបន្តិចពេលដាក់ Mouse */
+        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5) !important;
     }
     
-    /* សរសេរអក្សរខ្មែរថ្មីចូលទៅក្នុងប៊ូតុងដោយសុវត្ថិភាព */
     [data-testid="stFileUploaderDropzone"] button::after {
         content: "➕ បញ្ចូលហ្វាល" !important;
         font-family: 'Kantumruy Pro', sans-serif !important;
-        font-size: 15px !important;
+        font-size: 24px !important; /* ⬅️ អក្សរធំច្បាស់ៗ */
+        font-weight: bold !important;
         color: white !important;
         display: block !important;
-        line-height: 45px !important;
+        line-height: 120px !important; /* ⬅️ តម្រឹមចំកណ្តាលប៊ូតុង */
         text-align: center !important;
         width: 100% !important;
     }
@@ -98,28 +101,24 @@ def run_subtitle_app():
     st.markdown('<div class="main-title">🎙️ កម្មវិធីបកប្រែសំឡេងទៅជាអក្សរ</div>', unsafe_allow_html=True)
 
     # ==========================================
-    # 📂 ជំហានទី ១៖ ប្រអប់បញ្ចូលឯកសារ (រចនាថ្មីតាមគំនិតបង)
+    # 📂 ជំហានទី ១៖ ប្រអប់បញ្ចូលឯកសារ (រចនាថ្មីខ្នាតធំ)
     # ==========================================
     st.markdown("### 📂 ជំហានទី ១៖ បញ្ចូលឯកសាររបស់អ្នក")
     
-    # បែងចែកអេក្រង់ជា ២ ផ្នែក៖ ខាងឆ្វេងធំ (លេខ 3) ខាងស្តាំតូច (លេខ 1)
-    col_box, col_btn = st.columns([3, 1])
+    # បែងចែកអេក្រង់ (កែទំហំឱ្យប៊ូតុងមានទំហំធំទូលាយបន្តិច ដើម្បីឱ្យអក្សរធំៗមើលទៅសម)
+    col_box, col_btn = st.columns([2.5, 1.5])
 
-    # ដាក់កូដ Uploader នៅខាងស្តាំ (col_btn)
     with col_btn:
         uploaded_file = st.file_uploader("", label_visibility="collapsed")
 
-    # ដាក់កូដប្រអប់ខ្មៅនៅខាងឆ្វេង (col_box) ដើម្បីបង្ហាញឈ្មោះហ្វាល
     with col_box:
         if uploaded_file:
-            # បើមានហ្វាលចូល បង្ហាញឈ្មោះហ្វាលពណ៌បៃតង
             file_name = uploaded_file.name
-            st.markdown(f'<div class="filename-box" style="color: #10B981;">✅ ឯកសារ៖ {file_name}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="filename-box" style="color: #10B981; border-color: #10B981;">✅ {file_name}</div>', unsafe_allow_html=True)
         else:
-            # បើអត់ទាន់មានហ្វាល បង្ហាញអក្សរពណ៌ប្រផេះ
             st.markdown('<div class="filename-box" style="color: #64748B;">មិនទាន់មានឯកសារទេ...</div>', unsafe_allow_html=True)
 
-    # លក្ខខណ្ឌឆែកប្រភេទហ្វាលការពារអ្នកប្រើប្រាស់
+    # លក្ខខណ្ឌឆែកប្រភេទហ្វាល
     allowed_extensions = ['mp3', 'wav', 'm4a', 'flac', 'mp4', 'mkv', 'srt', 'vtt', 'txt']
     if uploaded_file:
         file_ext = uploaded_file.name.split('.')[-1].lower()
@@ -127,7 +126,7 @@ def run_subtitle_app():
             st.error("❌ សូមអភ័យទោស! ប្រព័ន្ធទទួលតែឯកសារសំឡេង វីដេអូ ឬអត្ថបទ SRT/TXT ប៉ុណ្ណោះ។")
             uploaded_file = None 
 
-    st.write("") # ដកឃ្លាបន្តិច
+    st.write("") 
     st.divider()
 
     # ==========================================
