@@ -2,7 +2,7 @@ import streamlit as st
 import time
 
 def run_subtitle_app():
-    # --- 🎨 កូដ CSS ពិសេស៖ បង្ខំកែសម្រួលប្រអប់ Uploader ឱ្យទៅជាចតុកោណកែងធំ និងចំកណ្តាលបេះបិទ ---
+    # --- 🎨 កូដ CSS ពិសេស៖ បង្ខំកែសម្រួលប្រអប់ Uploader ឱ្យទៅជាចតុកោណកែងធំ និងចំកណ្តាលបេះបិទ (គ្រប់កំណែ Streamlit) ---
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&family=Kantumruy+Pro:wght@300;400;500;700&display=swap');
@@ -54,10 +54,13 @@ def run_subtitle_app():
     }
 
     /* ---------------------------------------------------------------- */
-    /* 🔥 បង្ខំកែសម្រួល File Uploader ឱ្យចេញរាងចតុកោណកែងធំ និងចំកណ្តាល (Strict Override) */
+    /* 🚀 ផ្នែកកូដបង្ខំផ្លុំប្រអប់ Uploader ឱ្យទៅជាចតុកោណកែងធំ និងកណ្តាលបេះបិទ (Core CSS Override) */
     /* ---------------------------------------------------------------- */
     
-    .stFileUploader, div[data-testid="stFileUploader"] {
+    /* ១. លុបផ្ទៃខាងក្រោយខ្មៅ និងគែមចាស់ចោលទាំងអស់ */
+    .stFileUploader, 
+    div[data-testid="stFileUploader"], 
+    section[data-testid="stFileUploader"] {
         background-color: transparent !important;
         border: none !important;
         padding: 0px !important;
@@ -65,32 +68,40 @@ def run_subtitle_app():
         width: 100% !important;
     }
 
-    /* បង្ខំឱ្យចេញរាងចតុកោណកែងធំ (កម្ពស់ 260px) និងពណ៌កញ្ចក់ថ្លាស្អាត */
-    div[data-testid="stFileUploaderDropzone"] {
-        background-color: rgba(221, 227, 240, 0.95) !important; /* ពណ៌កញ្ចក់សថ្លា */
-        border: 2px dashed #6366F1 !important; /* គែមឆ្នូតៗ */
+    /* ២. បង្ខំឱ្យប្រអប់ Dropzone ឡើងរាងជាចតុកោណកែងធំ (កម្ពស់ 280px) និងពណ៌កញ្ចក់សថ្លា */
+    .stFileUploader > div,
+    div[data-testid="stFileUploaderDropzone"],
+    div[data-testid="stFileDropzone"],
+    .uploadedFile {
+        background-color: rgba(221, 227, 240, 0.95) !important; /* ពណ៌កញ្ចក់សថ្លាស្អាត */
+        background: rgba(221, 227, 240, 0.95) !important;
+        border: 2px dashed #6366F1 !important; /* គែមឆ្នូតៗពណ៌ស្វាយ */
         border-radius: 16px !important;
-        height: 260px !important; /* កម្ពស់រាងចតុកោណកែងធំ */
-        min-height: 260px !important;
+        height: 280px !important; /* បង្ខំកម្ពស់រាងចតុកោណកែងធំ */
+        min-height: 280px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important; /* តម្រឹមចំកណ្តាលឆ្វេងស្តាំ */
-        justify-content: center !important; /* តម្រឹមចំកណ្តាលលើក្រោម */
+        justify-content: center !important; /* សម្រួលឱ្យចំកណ្តាលលើក្រោម */
         text-align: center !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+        padding: 30px !important;
         transition: all 0.3s ease-in-out !important;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
-        padding: 40px !important;
     }
 
-    /* ពេលដាក់ម៉ៅស៍ពីលើ */
+    /* ពេលដាក់ Mouse ពីលើ */
+    .stFileUploader > div:hover,
     div[data-testid="stFileUploaderDropzone"]:hover {
         background-color: rgba(255, 255, 255, 0.98) !important;
+        background: rgba(255, 255, 255, 0.98) !important;
         border-color: #3B82F6 !important;
         box-shadow: 0 12px 40px rgba(99, 102, 241, 0.25) !important;
     }
 
-    /* រៀបចំប្លង់ខាងក្នុងឱ្យចំកណ្តាលបេះបិទ */
-    div[data-testid="stFileUploaderDropzone"] > div {
+    /* ៣. រៀបចំប្លង់ និងរចនាសម្ព័ន្ធខាងក្នុងឱ្យរត់ចំកណ្តាល និងបាត់ឆ្នូតខ្មៅចាស់ */
+    div[data-testid="stFileUploaderDropzone"] > div,
+    div[data-testid="stFileUploaderDropzone"] > section,
+    .stFileUploader > div > div {
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
@@ -98,36 +109,42 @@ def run_subtitle_app():
         gap: 15px !important;
         width: 100% !important;
         height: 100% !important;
-        background: none !important; /* លុបពណ៌ខ្មៅចាស់ចេញ */
+        background-color: transparent !important;
+        background: transparent !important;
         border: none !important;
+        padding: 0px !important;
     }
 
-    /* កែច្នៃរូបតំណាង (Upload Icon) ឱ្យចំកណ្តាល */
-    div[data-testid="stFileUploaderDropzone"] svg {
-        fill: #6366F1 !important;
-        width: 48px !important;
-        height: 48px !important;
-        margin: 0 auto !important;
-        display: block !important;
-    }
-
-    /* បង្ខំប៊ូតុង Browse Files ឱ្យចំកណ្តាល */
-    div[data-testid="stFileUploaderDropzone"] button {
+    /* ៤. បង្ខំប៊ូតុង "Browse Files" (Upload) ឱ្យធំ និងចំកណ្តាលចតុកោណកែង */
+    div[data-testid="stFileUploaderDropzone"] button,
+    .stFileUploader button {
         background: linear-gradient(135deg, #6366F1 0%, #3B82F6 100%) !important;
         color: #FFFFFF !important;
         border: none !important;
-        padding: 12px 30px !important;
+        padding: 12px 32px !important; /* ប៊ូតុងធំស្អាត */
         border-radius: 8px !important;
         font-weight: bold !important;
         font-size: 15px !important;
         box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
-        margin: 0 auto !important; /* បង្ខំឱ្យចំកណ្តាល */
+        margin: 0 auto !important; /* បង្ខំចំកណ្តាលឆ្វេងស្តាំ */
         display: inline-block !important;
     }
 
-    /* កំណត់ពណ៌អក្សរណែនាំទាំងអស់ក្នុងប្រអប់ឱ្យពណ៌ក្រម៉ៅងាយមើលលើផ្ទៃស */
+    /* ៥. កែច្នៃរូបតំណាងសញ្ញា Upload (SVG Icon) ឱ្យធំស្អាតចំកណ្តាល */
+    div[data-testid="stFileUploaderDropzone"] svg,
+    .stFileUploader svg {
+        fill: #6366F1 !important;
+        width: 50px !important;
+        height: 50px !important;
+        margin: 0 auto 10px auto !important;
+        display: block !important;
+    }
+
+    /* ៦. បង្ខំអក្សរណែនាំក្នុងប្រអប់ឱ្យពណ៌ក្រម៉ៅងាយមើលលើផ្ទៃសថ្លា */
     div[data-testid="stFileUploaderDropzone"] span,
-    div[data-testid="stFileUploaderDropzone"] small {
+    div[data-testid="stFileUploaderDropzone"] small,
+    .stFileUploader span,
+    .stFileUploader small {
         color: #1E293B !important; 
         font-weight: 500 !important;
         font-size: 14px !important;
@@ -230,7 +247,7 @@ def run_subtitle_app():
         st.session_state.current_tab = "translate"
 
     # ==========================================
-    # របារចំហៀង (Sidebar) - លុបប្រអប់ "គណនីរបស់អ្នក" ចេញដាច់ស្រឡះ
+    # របារចំហៀង (Sidebar) - លុបប្រអប់ "គណនីរបស់អ្នក" ចេញស្អាតដាច់ស្រឡះ
     # ==========================================
     with st.sidebar:
         st.write("") 
@@ -258,7 +275,7 @@ def run_subtitle_app():
         st.write("") 
         st.write("") 
         
-        # ប៊ូតុង Logout ដាក់នៅខាងក្រោមគេ
+        # ប៊ូតុង Logout
         st.markdown('<div class="logout-box">', unsafe_allow_html=True)
         if st.button("ចាកចេញពីប្រព័ន្ធ (Logout)", key="btn_logout", use_container_width=True):
             st.session_state.logged_in = False
